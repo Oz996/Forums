@@ -17,7 +17,7 @@ const DeleteModal = ({ id }) => {
   const token = localStorage.getItem("token");
 
   const deleteMutation = async () => {
-      const res = await axios.delete(`http://localhost:7700/posts/${id}`, {
+      const res = await axios.delete(`https://forums-api.onrender.com/posts/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

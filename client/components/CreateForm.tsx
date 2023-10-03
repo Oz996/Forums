@@ -40,7 +40,7 @@ const CreateForm = () => {
 
   const newPostMutation = async (data) => {
     setIsLoading(true);
-    const res = await axios.post("http://localhost:7700/posts/", data, {
+    const res = await axios.post("https://forums-api.onrender.com/posts/", data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

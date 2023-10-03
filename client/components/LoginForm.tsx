@@ -34,7 +34,7 @@ const LoginForm = () => {
 
   const loginMutation = async (data) => {
     setIsLoading(true);
-    const res = await axios.post("http://localhost:7700/users/login", data);
+    const res = await axios.post("https://forums-api.onrender.com/users/login", data);
     return res.data;
   };
 

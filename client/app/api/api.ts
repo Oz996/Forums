@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getPosts = async () => {
   try {
-    const data = await axios.get("http://localhost:7700/posts");
+    const data = await axios.get("https://forums-api.onrender.com/posts");
     return data;
   } catch (error) {
     console.error(error);
@@ -11,7 +11,7 @@ export const getPosts = async () => {
 
 export const getPost = async (_id) => {
   try {
-    const data = await axios.get(`http://localhost:7700/posts/${_id}`);
+    const data = await axios.get(`https://forums-api.onrender.com/${_id}`);
     return data;
   } catch (error) {
     console.error(error);
@@ -20,7 +20,7 @@ export const getPost = async (_id) => {
 
 export const getUser = async (user) => {
   try {
-    const data = await axios.get(`http://localhost:7700/users/${user}`);
+    const data = await axios.get(`https://forums-api.onrender.com/${user}`);
     return data;
   } catch (error) {
     console.error(error);

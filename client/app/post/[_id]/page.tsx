@@ -49,7 +49,7 @@ export default function Post({ params }: { params: { _id: string } }) {
 
   const editMutation = async (data) => {
     const res = await axios.put(
-      `http://localhost:7700/posts/${params._id}`,
+      `https://forums-api.onrender.com/posts/${params._id}`,
       data,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -58,7 +58,7 @@ export default function Post({ params }: { params: { _id: string } }) {
 
   const deleteCommentMutation = async (data) => {
     const res = await axios.delete(
-      `http://localhost:7700/posts/${params._id}/comments/${9}`,
+      `https://forums-api.onrender.com/posts/${params._id}/comments/${9}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     console.log(res);

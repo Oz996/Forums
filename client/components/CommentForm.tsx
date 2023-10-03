@@ -18,7 +18,7 @@ const CommentForm = ({ params }) => {
 
   const commentMutation = async (data) => {
     const res = await axios.post(
-      `http://localhost:7700/posts/${params._id}/comments`,
+      `https://forums-api.onrender.com/posts/${params._id}/comments`,
       data,
       {
         headers: {
