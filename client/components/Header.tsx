@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import { MdOutlineEditNote } from "react-icons/md";
 import { FaSun, FaMoon } from "react-icons/fa";
 import {
@@ -16,18 +15,12 @@ import { toast } from "react-toastify";
 import { useTheme } from "next-themes";
 
 const Header = () => {
-  const [mounted, setMounted] = useState(false);
   const { isAuthenticated, handleLogout } = useAuth();
   const handleLogoutClick = () => {
     handleLogout();
     toast.success("Signed out");
   };
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
   const { theme, setTheme } = useTheme();
 
   return (

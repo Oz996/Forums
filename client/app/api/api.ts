@@ -20,7 +20,7 @@ export const getPost = async (_id) => {
 
 export const getUser = async (user) => {
   try {
-    const data = await axios.get(`https://forums-api.onrender.com/${user}`);
+    const data = await axios.get(`https://forums-api.onrender.com/users/${user}`);
     return data;
   } catch (error) {
     console.error(error);
