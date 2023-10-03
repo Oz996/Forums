@@ -9,18 +9,20 @@ export const getPosts = async () => {
   }
 };
 
-export const getPost = async (_id) => {
+export const getPost = async (_id: string) => {
   try {
-    const data = await axios.get(`https://forums-api.onrender.com/${_id}`);
+    const data = await axios.get(
+      `https://forums-api.onrender.com/posts/${_id}`
+    );
     return data;
   } catch (error) {
     console.error(error);
   }
 };
 
-export const getUser = async (user) => {
+export const getUser = async (user: string) => {
   try {
-    const data = await axios.get(`https://forums-api.onrender.com/users/${user}`);
+    const data = await axios.get(`https://forums-api.onrender.com/user${user}`);
     return data;
   } catch (error) {
     console.error(error);

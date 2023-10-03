@@ -28,3 +28,14 @@ export interface Categories {
 export interface Token {
   token: string;
 }
+
+export interface PostData {
+  title: string;
+  body: string;
+  category: string;
+}
+
+export interface UserData {
+  userName: string
+  email: string
+}
