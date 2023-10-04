@@ -12,6 +12,8 @@ router.get("/posts/:id", userModel.getUsersPosts);
 
 router.get("/:id", userModel.getUserById);
 
+router.put("/:id", authMiddleware, userModel.updateUser);
+
 router.get("/", userModel.getAllUsers);
 
 router.delete("/:id", authMiddleware, userModel.deleteUser);

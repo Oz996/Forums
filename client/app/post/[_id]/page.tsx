@@ -33,14 +33,8 @@ export default function Post({ params }: { params: { _id: string } }) {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
-  } = useForm({
-    defaultValues: {
-      title: data?.data?.title || "",
-      body: data?.data?.body || "",
-    },
-  });
+  } = useForm();
 
   const handleEditClick = () => {
     setValue("title", data?.data?.title || "");
@@ -81,9 +75,6 @@ export default function Post({ params }: { params: { _id: string } }) {
   const onSubmit = (data: EditData) => {
     mutation.mutate(data);
   };
-
-  const title = getValues("title");
-  const body = getValues("body");
 
   useEffect(() => {
     if (data === undefined) return router.push("/");

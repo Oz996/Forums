@@ -96,3 +96,33 @@ exports.deleteUser = (req, res) => {
     .then(() => res.status(200).json({ message: "User deleted" }))
     .catch(() => res.status(404).json({ message: "Failed to delete user" }));
 };
+
+exports.updateUser = (req, res) => {
+  const userId = req.params.id;
+  const { userName, email, image } = req.body;
+
+  User.findByIdAndUpdate(
+    userId,
+    {
+      $set: {
+        userName: userName,
+        email: email,
+        image: image,
+      },
+    },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json({
+        message: "User information updated",
+        user: updatedUser,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Failed to update user information" });
+    });
+};
