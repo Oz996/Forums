@@ -1,11 +1,12 @@
 import { Button, Textarea } from "@nextui-org/react";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { Comment } from "@/types/types";
 
-const CommentForm = ({ params }) => {
+const CommentForm = ({ params }: {params: {_id: string}}) => {
   const {
     register,
     handleSubmit,
@@ -16,7 +17,7 @@ const CommentForm = ({ params }) => {
   const queryClient = useQueryClient()
   const token = localStorage.getItem("token");
 
-  const commentMutation = async (data) => {
+  const commentMutation = async (data: Comment) => {
     const res = await axios.post(
       `https://forums-api.onrender.com/posts/${params._id}/comments`,
       data,
@@ -42,8 +43,8 @@ const CommentForm = ({ params }) => {
     },
   });
 
-  const onSubmit = (data) => {
-    mutation.mutate(data);
+  const onSubmit = (data: FieldValues) => {
+    mutation.mutate(data as Comment);
   };
   return (
     <section className="p-10 md:rounded-xl border">

@@ -5,10 +5,7 @@ import { FaSun, FaMoon } from "react-icons/fa";
 import {
   Navbar,
   NavbarBrand,
-  NavbarContent,
   NavbarItem,
-  Button,
-  Switch,
 } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "react-toastify";

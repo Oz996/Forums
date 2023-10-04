@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Avatar, Button, Card } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 
-export default function User({ params }) {
+export default function User({ params }: { params: { user: string } }) {
   console.log(params.user);
   const { data } = useQuery({
     queryKey: ["user"],
@@ -13,7 +13,7 @@ export default function User({ params }) {
   });
 
   const { userEmail } = useAuth();
-  console.log(data)
+  console.log(data);
 
   return (
     <section className="pt-24">
@@ -21,13 +21,18 @@ export default function User({ params }) {
         <Card className="p-10 px-20">
           <div className="flex justify-between">
             <div className="grid grid-cols-2">
-              <Avatar size="lg" className="mb-2" src={data?.data?.image}></Avatar>
+              <Avatar
+                size="lg"
+                className="mb-2"
+                src={data?.data?.image}
+              ></Avatar>
               <Button>Change Image</Button>
               <p className="font-semibold">Email</p>
               <p>{data?.data?.email}</p>
               <p className="font-semibold">Username</p>
               <p> {data?.data?.userName}</p>
-              <p className="mt-1">Member since</p> <p className="mt-1">{data?.data?.createdAt?.slice(0,10)}</p>
+              <p className="mt-1">Member since</p>{" "}
+              <p className="mt-1">{data?.data?.createdAt?.slice(0, 10)}</p>
             </div>
             <div>
               {userEmail === data?.data?.email && (

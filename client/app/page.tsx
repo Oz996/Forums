@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "./api/api";
 import PostCard from "@/components/PostCard";
 import { Spinner } from "@nextui-org/react";
+import { Post } from "@/types/types";
 
 export default function Home() {
   const { data, isLoading } = useQuery({
@@ -24,8 +25,8 @@ export default function Home() {
   return (
     <section className="flex min-h-screen flex-col items-center justify-between md:p-24 pt-24">
       <div className="max-w-[62rem]">
-        {posts?.map((post) => (
-          <PostCard key={post._id} post={post} isLoading={isLoading} />
+        {posts?.map((post: Post) => (
+          <PostCard key={post._id} post={post} />
         ))}
       </div>
     </section>

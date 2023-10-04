@@ -1,7 +1,7 @@
 "use client";
 import { Button, Input } from "@nextui-org/react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { User } from "@/types/types";
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +22,7 @@ const LoginForm = () => {
     }
   }, [isAuthenticated, router]);
 
-  const formData = {
+  const defaultValues = {
     email: "",
     password: "",
   };
@@ -30,9 +31,9 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm(formData);
+  } = useForm({defaultValues});
 
-  const loginMutation = async (data) => {
+  const loginMutation = async (data: User) => {
     setIsLoading(true);
     const res = await axios.post("https://forums-api.onrender.com/users/login", data);
     return res.data;
@@ -53,8 +54,8 @@ const LoginForm = () => {
     }
   });
 
-  const onSubmit = (data) => {
-    mutation.mutate(data);
+  const onSubmit = (data: FieldValues) => {
+    mutation.mutate(data as User);
   };
 
   return (

@@ -1,9 +1,10 @@
+import { Post } from "@/types/types";
 import { Avatar, Card, CardHeader, Skeleton } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 
-const PostCard = ({ post, isLoading }) => {
+const PostCard = ({ post }: {post: Post}) => {
   const substring = () => {
     const body = post?.body;
     const bodyLength = post?.body.length > 200;

@@ -1,6 +1,6 @@
 import { Categories, Post } from "@/types/types";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -10,18 +10,21 @@ import { useState } from "react";
 const CreateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const formData: Post = {
+  const defaultValues : Post = {
+    _id: "",
     title: "",
     body: "",
     category: "",
-    createdAt: new Date().toLocaleDateString(),
+    createdAt: "",
     updatedAt: "",
     user: {
+      userName:"",
       email: "",
       password: "",
       image: "",
       _id: "",
     },
+    comments: []
   };
 
   const categories: Categories[] = [
@@ -34,11 +37,11 @@ const CreateForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(formData);
+  } = useForm<Post>({defaultValues });
 
   const token = localStorage.getItem("token");
 
-  const newPostMutation = async (data) => {
+  const newPostMutation = async (data: Post) => {
     setIsLoading(true);
     const res = await axios.post("https://forums-api.onrender.com/posts/", data, {
       headers: {
@@ -59,8 +62,8 @@ const CreateForm = () => {
     },
   });
 
-  const onSubmit = async (data) => {
-    mutation.mutate(data);
+  const onSubmit = async (data: FieldValues) => {
+    mutation.mutate(data as Post);
   };
 
   return (

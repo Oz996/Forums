@@ -1,7 +1,7 @@
 "use client";
 import { Button, Input } from "@nextui-org/react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { RegisterUser } from "@/types/types";
 
 const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,19 +20,20 @@ const RegisterForm = () => {
       router.push("/");
     }
   }, [isAuthenticated, router]);
-  const formData = {
+  const defaultValues = {
     userName: "",
     email: "",
     password: "",
+    Cpassword: "",
     image: null,
   };
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(formData);
+  } = useForm({defaultValues});
 
-  const registerMutation = async (data) => {
+  const registerMutation = async (data: RegisterUser) => {
     setIsLoading(true);
     const res = await axios.post("https://forums-api.onrender.com/users/register", data);
     return res.data;
@@ -49,8 +51,8 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    mutation.mutate(data);
+  const onSubmit = (data: FieldValues) => {
+    mutation.mutate(data as RegisterUser);
   };
 
   return (

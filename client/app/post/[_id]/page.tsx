@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { EditData, PostData, Comment } from "@/types/types";
 
 export default function Post({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -47,7 +48,7 @@ export default function Post({ params }: { params: { _id: string } }) {
 
   const token = localStorage.getItem("token");
 
-  const editMutation = async (data) => {
+  const editMutation = async (data: EditData) => {
     const res = await axios.put(
       `https://forums-api.onrender.com/posts/${params._id}`,
       data,
@@ -56,7 +57,7 @@ export default function Post({ params }: { params: { _id: string } }) {
     console.log(res);
   };
 
-  const deleteCommentMutation = async (data) => {
+  const deleteCommentMutation = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const res = await axios.delete(
       `https://forums-api.onrender.com/posts/${params._id}/comments/${9}`,
       { headers: { Authorization: `Bearer ${token}` } }
@@ -73,11 +74,11 @@ export default function Post({ params }: { params: { _id: string } }) {
     },
     onSettled: () => {
       setEditing(false);
-      queryClient.invalidateQueries("post");
+      queryClient.invalidateQueries(["post"]);
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: EditData) => {
     mutation.mutate(data);
   };
 
@@ -147,7 +148,7 @@ export default function Post({ params }: { params: { _id: string } }) {
           )}
         </div>
       </div>
-      {data?.data?.comments.map((data) => (
+      {data?.data?.comments?.map((data: Comment) => (
         <div
           key={data._id}
           className="flex flex-col md:flex-row md:rounded-xl border w-full ml-auto md:w-[80%]"

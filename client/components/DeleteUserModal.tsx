@@ -12,13 +12,13 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const DeleteUserModal = ({ id }) => {
+const DeleteUserModal = ({ id }: {id :String}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { handleLogout } = useAuth();
   const router = useRouter();
   const token = localStorage.getItem("token");
 
-  const deleteMutation = async (data) => {
+  const deleteMutation = async (e: React.MouseEvent) => {
     const res = await axios.delete(`https://forums-api.onrender.com/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
