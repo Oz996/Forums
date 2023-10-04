@@ -2,23 +2,29 @@
 import Link from "next/link";
 import { MdOutlineEditNote } from "react-icons/md";
 import { FaSun, FaMoon } from "react-icons/fa";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarItem,
-} from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarItem } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
 import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 const Header = () => {
+  const [mounted, setMounted] = useState(false);
   const { isAuthenticated, handleLogout } = useAuth();
+  const { theme, setTheme } = useTheme();
+
   const handleLogoutClick = () => {
     handleLogout();
     toast.success("Signed out");
   };
 
-  const { theme, setTheme } = useTheme();
+  console.log(theme);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <Navbar
@@ -47,13 +53,14 @@ const Header = () => {
         )}
       </NavbarItem>
       <div className="cursor-pointer">
-        {theme === "light" ? (
+        {theme === "light" && (
           <FaSun
             className="text-white"
             size={21}
             onClick={() => setTheme("dark")}
           />
-        ) : (
+        )}
+        {theme === "dark" && (
           <FaMoon size={21} onClick={() => setTheme("light")} />
         )}
       </div>
