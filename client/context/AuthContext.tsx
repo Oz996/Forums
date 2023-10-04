@@ -1,12 +1,23 @@
 "use client";
-import { Token } from "@/types/types";
 import { ReactElement, useEffect, useState } from "react";
 import { createContext } from "react";
 
-export const AuthContext = createContext(null);
+interface AuthContextType {
+  isAuthenticated: boolean;
+  userEmail: string | null;
+  handleLogin: (email: string, token: string) => void;
+  handleLogout: () => void;
+}
 
-// const initialState = {
-// }
+const initialState: AuthContextType = {
+  isAuthenticated: false,
+  userEmail: null,
+  handleLogin: (email: string, token: string) => {},
+  handleLogout: () => {},
+};
+
+export const AuthContext = createContext<AuthContextType>(initialState);
+
 export const AuthContextProvider = ({
   children,
 }: {
