@@ -7,10 +7,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const CreateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const {token} = useAuth()
   const defaultValues : Post = {
     _id: "",
     title: "",
@@ -39,8 +41,6 @@ const CreateForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Post>({defaultValues });
-
-  const token = localStorage.getItem("token");
 
   const newPostMutation = async (data: Post) => {
     setIsLoading(true);

@@ -27,6 +27,8 @@ export default function Post({ params }: { params: { _id: string } }) {
   const date = data?.data?.createdAt.slice(0, 10);
   const updated = data?.data?.updatedAt.slice(0, 10);
 
+  const {token} = useAuth()
+
   const {
     register,
     handleSubmit,
@@ -45,8 +47,6 @@ export default function Post({ params }: { params: { _id: string } }) {
     setValue("body", data?.data?.body || "");
     setEditing((prev) => !prev);
   };
-
-  const token = localStorage.getItem("token");
 
   const editMutation = async (data: EditData) => {
     const res = await axios.put(

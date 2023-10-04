@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Comment } from "@/types/types";
+import { useAuth } from "@/hooks/useAuth";
 
 const CommentForm = ({ params }: {params: {_id: string}}) => {
   const {
@@ -15,7 +16,7 @@ const CommentForm = ({ params }: {params: {_id: string}}) => {
   } = useForm();
 
   const queryClient = useQueryClient()
-  const token = localStorage.getItem("token");
+  const {token} = useAuth()
 
   const commentMutation = async (data: Comment) => {
     const res = await axios.post(

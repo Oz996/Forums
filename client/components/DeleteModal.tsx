@@ -1,3 +1,4 @@
+import { useAuth } from "@/hooks/useAuth";
 import {
   Button,
   Modal,
@@ -14,7 +15,7 @@ import { toast } from "react-toastify";
 const DeleteModal = ({ id }: {id: string}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const token = localStorage.getItem("token");
+  const {token} = useAuth()
 
   const deleteMutation = async () => {
       const res = await axios.delete(`https://forums-api.onrender.com/posts/${id}`, {
