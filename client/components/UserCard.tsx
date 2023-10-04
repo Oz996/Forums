@@ -1,7 +1,12 @@
+import { User } from "@/types/types";
 import { Avatar, Badge, Card, CardBody, CardHeader } from "@nextui-org/react";
 import Link from "next/link";
 
-const UserCard = ({ data }) => {
+interface props {
+  user: User;
+}
+
+const UserCard = ({ data }: { data: props }) => {
   // console.log(data);
   return (
     <Card className="p-5 min-w-[15rem] h-full shadow-none border-b-1 border-gray-300 md:border-none">
