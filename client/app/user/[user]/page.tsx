@@ -45,7 +45,7 @@ export default function User({ params }: { params: { user: string } }) {
 
   const mutation = useMutation(userMutation, {
     onSuccess: () => {
-      setEditing(false)
+      setEditing(false);
       toast.success("User updated");
     },
     onError: (error) => {
@@ -112,14 +112,16 @@ export default function User({ params }: { params: { user: string } }) {
               )}
             </div>
           </div>
-          <Button
-            onClick={handleEditClick}
-            color="primary"
-            variant="light"
-            className="mt-5 w-[3rem] font-semibold"
-          >
-            Edit
-          </Button>
+          {userEmail === data?.data?.email && (
+            <Button
+              onClick={handleEditClick}
+              color="primary"
+              variant="light"
+              className="mt-5 w-[3rem] font-semibold"
+            >
+              Edit
+            </Button>
+          )}
         </Card>
       </div>
     </section>
