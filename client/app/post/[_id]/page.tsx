@@ -6,7 +6,7 @@ import CommentForm from "@/components/CommentForm";
 import { Button, Input, Textarea, input } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import DeleteModal from "@/components/DeleteModal";
-import { useForm } from "react-hook-form";
+import { FieldValue, FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -72,8 +72,8 @@ export default function Post({ params }: { params: { _id: string } }) {
     },
   });
 
-  const onSubmit = (data: EditData) => {
-    mutation.mutate(data);
+  const onSubmit = (data: FieldValues) => {
+    mutation.mutate(data as EditData);
   };
 
   useEffect(() => {
