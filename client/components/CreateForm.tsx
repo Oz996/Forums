@@ -26,6 +26,8 @@ const CreateForm = () => {
       password: "",
       image: "",
       _id: "",
+      createdAt: "",
+      updatedAt: ""
     },
     comments: []
   };
