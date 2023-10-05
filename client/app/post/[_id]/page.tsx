@@ -6,16 +6,14 @@ import CommentForm from "@/components/CommentForm";
 import { Button, Input, Textarea, input } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import DeleteModal from "@/components/DeleteModal";
-import { FieldValue, FieldValues, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { EditData, PostData, Comment } from "@/types/types";
 
 export default function Post({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
-  const router = useRouter();
   const queryClient = useQueryClient();
   const { userEmail } = useAuth();
   const { data, isLoading } = useQuery({
@@ -75,10 +73,6 @@ export default function Post({ params }: { params: { _id: string } }) {
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as EditData);
   };
-
-  useEffect(() => {
-    if (data === undefined) return router.push("/");
-  }, [data, router]);
 
   return (
     <section className="md:max-w-[62rem] mx-auto container pt-24 flex flex-col gap-10 md:gap-3">

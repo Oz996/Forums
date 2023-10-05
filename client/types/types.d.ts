@@ -4,26 +4,28 @@ export interface Theme {
 }
 
 export interface Post {
-  _id: string
+  _id: string;
   title: string;
   body: string;
   category: string;
   createdAt: string;
   updatedAt: string;
   user: User;
-  comments: Comment[]
+  comments: Comment[];
 }
 
 export interface User {
-  userName: string
+  userName: string;
   email: string;
   password: string;
   image: string;
   _id: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface RegisterUser extends User {
-  Cpassword: string
+  Cpassword: string;
 }
 
 export interface Categories {
@@ -43,19 +45,19 @@ export interface PostData {
 }
 
 export interface UserData {
-  userName: string
-  email: string
+  userName: string;
+  email: string;
 }
 
 export interface EditData {
-  title: string
-  body: string
+  title: string;
+  body: string;
 }
 
 export interface Comment {
-  _id: string
-  text: string | number
-  createdAt: string
-  updatedAt: string
-  user: User
+  _id: string;
+  text: string | number;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
 }

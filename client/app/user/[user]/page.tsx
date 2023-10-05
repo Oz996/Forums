@@ -2,12 +2,14 @@
 import { getUser } from "@/app/api/api";
 import DeleteUserModal from "@/components/DeleteUserModal";
 import PostCard from "@/components/PostCard";
+import UserCard from "@/components/UserCard";
 import { useAuth } from "@/hooks/useAuth";
 import { Comment, Post, UserData } from "@/types/types";
-import { Avatar, Button, Card, Input } from "@nextui-org/react";
+import { Button, Card, Input } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
+import { ErrorMessage } from "@hookform/error-message";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -66,63 +68,80 @@ export default function User({ params }: { params: { user: string } }) {
       <div className="max-w-[62rem] mx-auto flex flex-col gap-5">
         <Card className="p-10 px-20">
           <div className="flex justify-between">
-            <div className="grid grid-cols-2">
-              <Avatar
-                size="lg"
-                className="mb-2"
-                src={data?.data?.user?.image}
-              ></Avatar>
-              <input type="file" />
-              {!editing ? (
-                <>
-                  <p className="font-semibold">Email</p>
-                  <p>{data?.data?.user?.email}</p>
-                  <p className="font-semibold">Username</p>
-                  <p> {data?.data?.user?.userName}</p>
-                </>
-              ) : (
+            <div className="border-r-1 -ml-20">
+              <UserCard data={data?.data} />
+            </div>
+            {!editing ? (
+              <div className="grid grid-cols-2 mr-72 mt-16">
+                <p className="font-semibold">Email</p>{" "}
+                <p>{data?.data?.user?.email}</p>
+                <p className="font-semibold">Username</p>{" "}
+                <p>{data?.data?.user?.userName}</p>
+                <Button
+                  onClick={handleEditClick}
+                  className="font-semibold"
+                  color="primary"
+                  variant="light"
+                >
+                  Edit
+                </Button>
+                <DeleteUserModal id={data?.data?.user?._id} />
+              </div>
+            ) : (
+              <div className="mr-80 mt-16 w-[20rem]">
                 <form
-                  onSubmit={handleSubmit(onSubmit)}
                   className="flex flex-col gap-3"
+                  onSubmit={handleSubmit(onSubmit)}
                 >
                   <Input
-                    {...register("email", { required: "Cannot be empty" })}
+                    {...register("email", {
+                      required: "Email cannot be empty",
+                    })}
                     label="Email"
                     defaultValue=" "
                   />
+                  <ErrorMessage
+                    errors={errors}
+                    name="email"
+                    render={({ message }) => (
+                      <p className="text-red-500 text-sm font-semibold">
+                        {message}
+                      </p>
+                    )}
+                  ></ErrorMessage>
                   <Input
-                    {...register("userName", { required: "Cannot be empty" })}
-                    label="Username"
+                    {...register("userName", {
+                      required: "Username cannot be empty",
+                    })}
                     defaultValue=" "
+                    label="Username"
                   />
-                  <Button color="secondary" type="submit">
-                    Submit
-                  </Button>
+                  <ErrorMessage
+                    errors={errors}
+                    name="userName"
+                    render={({ message }) => (
+                      <p className="text-red-500 text-sm font-semibold">
+                        {message}
+                      </p>
+                    )}
+                  ></ErrorMessage>
+                  <div className="flex">
+                    <Button className="w-[70%]" type="submit" color="secondary">
+                      Submit
+                    </Button>
+                    <Button
+                      className="w-[30%]"
+                      color="danger"
+                      variant="light"
+                      onClick={() => setEditing(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </form>
-              )}
-              {!editing && (
-                <>
-                  <p className="mt-1">Member since</p>
-                  <p className="mt-1">{data?.data?.createdAt?.slice(0, 10)}</p>
-                </>
-              )}
-            </div>
-            <div>
-              {userEmail === data?.data?.user?.email && (
-                <DeleteUserModal id={data?.data?.user?._id} />
-              )}
-            </div>
+              </div>
+            )}
           </div>
-          {userEmail === data?.data?.user?.email && (
-            <Button
-              onClick={handleEditClick}
-              color="primary"
-              variant="light"
-              className="mt-5 w-[3rem] font-semibold"
-            >
-              Edit
-            </Button>
-          )}
         </Card>
         <Card className="p-10 px-20">
           <h2 className="text-center text-xl font-semibold mb-5">
