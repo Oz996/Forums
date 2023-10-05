@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "comments" }],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+    posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Blog"}]
   },
   { timestamps: true }
 );

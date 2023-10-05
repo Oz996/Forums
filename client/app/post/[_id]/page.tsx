@@ -27,7 +27,7 @@ export default function Post({ params }: { params: { _id: string } }) {
   const date = data?.data?.createdAt.slice(0, 10);
   const updated = data?.data?.updatedAt.slice(0, 10);
 
-  const {token} = useAuth()
+  const { token } = useAuth();
 
   const {
     register,
@@ -43,20 +43,20 @@ export default function Post({ params }: { params: { _id: string } }) {
   };
 
   const editMutation = async (data: EditData) => {
-    const res = await axios.put(
+    await axios.put(
       `https://forums-api.onrender.com/posts/${params._id}`,
       data,
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    console.log(res);
   };
 
-  const deleteCommentMutation = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await axios.delete(
+  const deleteCommentMutation = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    await axios.delete(
       `https://forums-api.onrender.com/posts/${params._id}/comments/${9}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    console.log(res);
   };
 
   const mutation = useMutation(editMutation, {

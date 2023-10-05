@@ -10,8 +10,7 @@ export default function Home() {
     queryKey: ["posts"],
     queryFn: getPosts,
   });
-
-  console.log(isLoading);
+  
   const posts = data?.data || [];
   console.log(posts);
 

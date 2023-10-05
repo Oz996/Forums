@@ -65,13 +65,35 @@ exports.getUserById = (req, res) => {
   const userId = req.params.id;
 
   User.findById(userId)
-    // .populate("comments")
-    // .populate("posts")
-    .then((data) => res.status(200).json(data))
-    .catch(() =>
-      res.status(404).json({ message: "Could not retreive user by ID" })
-    );
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      Comment.find({ user: userId })
+        .then((comments) => {
+          Blog.find({ user: userId })
+            .then((posts) => {
+              const userData = {
+                user,
+                comments,
+                posts,
+              };
+              res.status(200).json(userData);
+            })
+            .catch(() => {
+              res.status(404).json({ message: "Could not retrieve user's posts" });
+            });
+        })
+        .catch(() => {
+          res.status(404).json({ message: "Could not retrieve user's comments" });
+        });
+    })
+    .catch(() => {
+      res.status(404).json({ message: "Could not retrieve user by ID" });
+    });
 };
+
 
 exports.getUsersPosts = (req, res) => {
   const userId = req.params.id;

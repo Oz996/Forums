@@ -1,8 +1,9 @@
 "use client";
 import { getUser } from "@/app/api/api";
 import DeleteUserModal from "@/components/DeleteUserModal";
+import PostCard from "@/components/PostCard";
 import { useAuth } from "@/hooks/useAuth";
-import { UserData } from "@/types/types";
+import { Comment, Post, UserData } from "@/types/types";
 import { Avatar, Button, Card, Input } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -30,8 +31,8 @@ export default function User({ params }: { params: { user: string } }) {
   } = useForm();
 
   const handleEditClick = () => {
-    setValue("email", data?.data?.email || "");
-    setValue("userName", data?.data?.userName || "");
+    setValue("email", data?.data?.user?.email || "");
+    setValue("userName", data?.data?.user?.userName || "");
     setEditing((prev) => !prev);
   };
 
@@ -62,22 +63,22 @@ export default function User({ params }: { params: { user: string } }) {
 
   return (
     <section className="pt-24">
-      <div className="max-w-[62rem] mx-auto">
+      <div className="max-w-[62rem] mx-auto flex flex-col gap-5">
         <Card className="p-10 px-20">
           <div className="flex justify-between">
             <div className="grid grid-cols-2">
               <Avatar
                 size="lg"
                 className="mb-2"
-                src={data?.data?.image}
+                src={data?.data?.user?.image}
               ></Avatar>
-              <Input type="file">Change Image</Input>
+              <input type="file" />
               {!editing ? (
                 <>
                   <p className="font-semibold">Email</p>
-                  <p>{data?.data?.email}</p>
+                  <p>{data?.data?.user?.email}</p>
                   <p className="font-semibold">Username</p>
-                  <p> {data?.data?.userName}</p>
+                  <p> {data?.data?.user?.userName}</p>
                 </>
               ) : (
                 <form
@@ -107,12 +108,12 @@ export default function User({ params }: { params: { user: string } }) {
               )}
             </div>
             <div>
-              {userEmail === data?.data?.email && (
-                <DeleteUserModal id={data?.data?._id} />
+              {userEmail === data?.data?.user?.email && (
+                <DeleteUserModal id={data?.data?.user?._id} />
               )}
             </div>
           </div>
-          {userEmail === data?.data?.email && (
+          {userEmail === data?.data?.user?.email && (
             <Button
               onClick={handleEditClick}
               color="primary"
@@ -122,6 +123,28 @@ export default function User({ params }: { params: { user: string } }) {
               Edit
             </Button>
           )}
+        </Card>
+        <Card className="p-10 px-20">
+          <h2 className="text-center text-xl font-semibold mb-5">
+            {userEmail === data?.data?.user?.email
+              ? "Your Posts"
+              : "Users Posts"}
+          </h2>
+          {data?.data?.posts?.map((post: Post) => (
+            <PostCard key={post?._id} post={post} />
+          ))}
+        </Card>
+        <Card className="p-10 px-20">
+          <h3 className="text-center text-xl font-semibold mb-5">
+            {userEmail === data?.data?.user?.email
+              ? "Your Latest Comments"
+              : "Users Latest Comments"}
+          </h3>
+          {data?.data?.comments?.map((comment: Comment) => (
+            <div key={comment?._id}>
+              <p>{comment?.text}</p>
+            </div>
+          ))}
         </Card>
       </div>
     </section>

@@ -45,8 +45,8 @@ const PostCard = ({ post }: {post: Post}) => {
             <Image
               src="/message.svg"
               alt="message icon"
-              width={40}
-              height={40}
+              width={35}
+              height={35}
             />
             <p className="font-semibold">{post?.comments.length}</p>
           </div>
