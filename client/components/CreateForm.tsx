@@ -13,25 +13,7 @@ const CreateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const {token} = useAuth()
-  const defaultValues : Post = {
-    _id: "",
-    title: "",
-    body: "",
-    category: "",
-    createdAt: "",
-    updatedAt: "",
-    user: {
-      userName:"",
-      email: "",
-      password: "",
-      image: "",
-      _id: "",
-      createdAt: "",
-      updatedAt: ""
-    },
-    comments: []
-  };
-
+  
   const categories: Categories[] = [
     { id: 0, value: "red", name: "Red" },
     { id: 1, value: "blue", name: "Blue" },
@@ -42,7 +24,7 @@ const CreateForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Post>({defaultValues });
+  } = useForm<Post>();
 
   const newPostMutation = async (data: Post) => {
     setIsLoading(true);

@@ -20,18 +20,12 @@ const RegisterForm = () => {
       router.push("/");
     }
   }, [isAuthenticated, router]);
-  const defaultValues = {
-    userName: "",
-    email: "",
-    password: "",
-    Cpassword: "",
-    image: null,
-  };
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({defaultValues});
+  } = useForm();
 
   const registerMutation = async (data: RegisterUser) => {
     setIsLoading(true);

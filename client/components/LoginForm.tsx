@@ -22,16 +22,12 @@ const LoginForm = () => {
     }
   }, [isAuthenticated, router]);
 
-  const defaultValues = {
-    email: "",
-    password: "",
-  };
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm({defaultValues});
+  } = useForm();
 
   const loginMutation = async (data: User) => {
     setIsLoading(true);
