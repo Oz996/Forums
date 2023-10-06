@@ -1,5 +1,5 @@
 import { Post } from "@/types/types";
-import { Avatar, Card, CardHeader, Skeleton } from "@nextui-org/react";
+import { Avatar, Card, CardHeader } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
