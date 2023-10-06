@@ -4,19 +4,14 @@ import { MdOutlineEditNote } from "react-icons/md";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { Navbar, NavbarBrand, NavbarItem } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
-import { toast } from "react-toastify";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import UserMenu from "./UserMenu";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
-  const { isAuthenticated, handleLogout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { theme, setTheme } = useTheme();
-
-  const handleLogoutClick = () => {
-    handleLogout();
-    toast.success("Signed out");
-  };
 
   console.log(theme);
 
@@ -45,9 +40,7 @@ const Header = () => {
       </NavbarItem>
       <NavbarItem>
         {isAuthenticated ? (
-          <span className="cursor-pointer" onClick={handleLogoutClick}>
-            Logout
-          </span>
+         <UserMenu />
         ) : (
           <Link href="/login">Login</Link>
         )}

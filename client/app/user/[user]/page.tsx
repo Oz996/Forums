@@ -24,7 +24,6 @@ export default function User({ params }: { params: { user: string } }) {
   const { userEmail, token } = useAuth();
   const queryClient = useQueryClient();
   console.log(data);
-
   const {
     register,
     handleSubmit,
@@ -63,32 +62,36 @@ export default function User({ params }: { params: { user: string } }) {
     mutation.mutate(data as UserData);
   };
 
+  const email = data?.data?.user?.email;
+
   return (
     <section className="pt-24">
-      <div className="max-w-[62rem] mx-auto flex flex-col gap-5">
-        <Card className="p-10 px-20">
-          <div className="flex justify-between">
-            <div className="border-r-1 -ml-20">
+      <div className="md:max-w-[62rem] mx-auto flex flex-col gap-5">
+        <Card className="md:p-10 md:px-20 p-3">
+          <div className="flex justify-between flex-col md:flex-row gap-4">
+            <div className="md:border-r-1">
               <UserCard data={data?.data} />
             </div>
             {!editing ? (
-              <div className="grid grid-cols-2 mr-72 mt-16">
-                <p className="font-semibold">Email</p>{" "}
-                <p>{data?.data?.user?.email}</p>
+              <div className="grid grid-cols-2 my-auto gap-2">
+                <p className="font-semibold">Email</p> <p>{email}</p>
                 <p className="font-semibold">Username</p>{" "}
                 <p>{data?.data?.user?.userName}</p>
-                <Button
-                  onClick={handleEditClick}
-                  className="font-semibold"
-                  color="primary"
-                  variant="light"
-                >
-                  Edit
-                </Button>
-                <DeleteUserModal id={data?.data?.user?._id} />
+                {userEmail === email && (
+                  <>
+                    <Button
+                      onClick={handleEditClick}
+                      className="font-semibold"
+                      color="primary"
+                    >
+                      Edit
+                    </Button>
+                    <DeleteUserModal id={data?.data?.user?._id} />
+                  </>
+                )}
               </div>
             ) : (
-              <div className="mr-80 mt-16 w-[20rem]">
+              <div className="md:w-[17rem] w-full">
                 <form
                   className="flex flex-col gap-3"
                   onSubmit={handleSubmit(onSubmit)}
@@ -143,19 +146,17 @@ export default function User({ params }: { params: { user: string } }) {
             )}
           </div>
         </Card>
-        <Card className="p-10 px-20">
+        <Card className="md:p-10 md:px-20 py-5">
           <h2 className="text-center text-xl font-semibold mb-5">
-            {userEmail === data?.data?.user?.email
-              ? "Your Posts"
-              : "Users Posts"}
+            {userEmail === email ? "Your Posts" : "Users Posts"}
           </h2>
           {data?.data?.posts?.map((post: Post) => (
             <PostCard key={post?._id} post={post} />
           ))}
         </Card>
-        <Card className="p-10 px-20">
+        <Card className="p-10 px-20 py-5">
           <h3 className="text-center text-xl font-semibold mb-5">
-            {userEmail === data?.data?.user?.email
+            {userEmail === email
               ? "Your Latest Comments"
               : "Users Latest Comments"}
           </h3>

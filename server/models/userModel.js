@@ -39,7 +39,7 @@ exports.loginUser = (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const token = jwt.sign({ email: data.email, userId: data._id }, secretKey);
-    res.json({ message: "User logged in", token });
+    res.json({ message: "User logged in", token, userId: data._id });
   });
 };
 
@@ -82,18 +82,21 @@ exports.getUserById = (req, res) => {
               res.status(200).json(userData);
             })
             .catch(() => {
-              res.status(404).json({ message: "Could not retrieve user's posts" });
+              res
+                .status(404)
+                .json({ message: "Could not retrieve user's posts" });
             });
         })
         .catch(() => {
-          res.status(404).json({ message: "Could not retrieve user's comments" });
+          res
+            .status(404)
+            .json({ message: "Could not retrieve user's comments" });
         });
     })
     .catch(() => {
       res.status(404).json({ message: "Could not retrieve user by ID" });
     });
 };
-
 
 exports.getUsersPosts = (req, res) => {
   const userId = req.params.id;
