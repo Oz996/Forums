@@ -25,10 +25,10 @@ export default function Home() {
 
   return (
     <section className="flex min-h-screen flex-col items-center pt-24">
-      <div className="w-[62rem]">
+      <div className="md:w-[62rem] w-full">
         <Card className="p-10">
-          <div className="flex gap-3">
-            <div className="w-[30%]">
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="md:w-[30%]">
               <Select label="Select Category">
                 {categories.map((category) => (
                   <SelectItem key={category.value} value={category.value}>
@@ -37,7 +37,7 @@ export default function Home() {
                 ))}
               </Select>
             </div>
-            <div className="w-[70%]">
+            <div className="md:w-[70%]">
               <Input
                 onChange={(e) => setSearch(e.target.value)}
                 label="Search for post..."
