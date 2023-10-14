@@ -1,10 +1,14 @@
 import { Post } from "@/types/types";
-import { Avatar, Card, CardHeader } from "@nextui-org/react";
+import { Avatar, Card, CardHeader, Skeleton } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 
-const PostCard = ({ post }: {post: Post}) => {
+interface props {
+  post: Post;
+}
+
+const PostCard = ({ post }: props) => {
   const substring = () => {
     const body = post?.body;
     const bodyLength = post?.body.length > 200;
@@ -15,7 +19,7 @@ const PostCard = ({ post }: {post: Post}) => {
   };
 
   const body = substring();
-  console.log(post)
+  console.log(post);
   const { theme } = useTheme();
 
   return (

@@ -1,7 +1,6 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
-import { getPost } from "../../api/api";
 import CommentForm from "@/components/CommentForm";
 import { Button, Input, Textarea, input } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,20 +9,21 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { EditData, PostData, Comment } from "@/types/types";
+import { EditData, Comment } from "@/types/types";
+import { GetPost } from "@/app/api/routes";
 
 export default function Post({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
   const queryClient = useQueryClient();
   const { userEmail } = useAuth();
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["post"],
-    queryFn: () => getPost(params._id),
+    queryFn: () => GetPost(params._id),
   });
   console.log(data);
 
-  const date = data?.data?.createdAt.slice(0, 10);
-  const updated = data?.data?.updatedAt.slice(0, 10);
+  const date = data?.createdAt.slice(0, 10);
+  const updated = data?.updatedAt.slice(0, 10);
 
   const { token } = useAuth();
 
@@ -35,8 +35,8 @@ export default function Post({ params }: { params: { _id: string } }) {
   } = useForm();
 
   const handleEditClick = () => {
-    setValue("title", data?.data?.title || "");
-    setValue("body", data?.data?.body || "");
+    setValue("title", data?.title || "");
+    setValue("body", data?.body || "");
     setEditing((prev) => !prev);
   };
 
@@ -78,14 +78,14 @@ export default function Post({ params }: { params: { _id: string } }) {
     <section className="md:max-w-[62rem] mx-auto container pt-24 flex flex-col gap-10 md:gap-3">
       <div className="flex flex-col md:flex-row md:rounded-xl border">
         <div>
-          <UserCard data={data?.data} />
+          <UserCard data={data} />
         </div>
         <div className="flex flex-col p-10 w-full">
           <div className="flex flex-col md:flex-row justify-between">
             {!editing ? (
               <div>
                 <h1 className="text-2xl text-center font-semibold mb-10">
-                  {data?.data?.title}
+                  {data?.title}
                 </h1>
                 {!editing && (
                   <div className="flex  my-6 items-center gap-3">
@@ -96,7 +96,7 @@ export default function Post({ params }: { params: { _id: string } }) {
                   </div>
                 )}
 
-                <p>{data?.data?.body}</p>
+                <p>{data?.body}</p>
               </div>
             ) : (
               <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
@@ -119,7 +119,7 @@ export default function Post({ params }: { params: { _id: string } }) {
               </form>
             )}
           </div>
-          {userEmail === data?.data?.user?.email && (
+          {userEmail === data?.user?.email && (
             <div className="flex justify-end border-t mt-5">
               <Button
                 variant="light"
@@ -133,7 +133,7 @@ export default function Post({ params }: { params: { _id: string } }) {
           )}
         </div>
       </div>
-      {data?.data?.comments?.map((data: Comment) => (
+      {data?.comments?.map((data: Comment) => (
         <div
           key={data._id}
           className="flex flex-col md:flex-row md:rounded-xl border w-full ml-auto md:w-[80%]"

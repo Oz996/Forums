@@ -1,27 +1,39 @@
 import { Post, User } from "@/types/types";
-import { Avatar, Badge, Card, CardBody, CardHeader } from "@nextui-org/react";
+import {
+  Avatar,
+  Badge,
+  Card,
+  CardBody,
+  CardHeader,
+  Skeleton,
+} from "@nextui-org/react";
 import Link from "next/link";
 
 interface props {
-  user: User;
-  posts?: Post[];
+  data: {
+    user: User;
+    posts?: Post[];
+  };
+  isLoading: boolean;
 }
 
-const UserCard = ({ data }: { data: props }) => {
-  
-  const newbie =  data?.posts && data?.posts?.length < 1;
-  const member =  data?.posts && data?.posts?.length > 0 && data?.posts?.length < 3;
-  const regular = data?.posts &&  data?.posts?.length >= 3;
+const UserCard = ({ data, isLoading }: props) => {
+  const newbie = data?.posts && data?.posts?.length < 1;
+  const member =
+    data?.posts && data?.posts?.length > 0 && data?.posts?.length < 3;
+  const regular = data?.posts && data?.posts?.length >= 3;
 
   // console.log(data);
   return (
     <Card className="p-5 min-w-[15rem] h-full shadow-none border-b-1 border-gray-300 md:border-none">
       <CardHeader className="flex justify-center">
-        <Badge>
-          <Link href={`/user/${data?.user?._id}`}>
-            <Avatar size="lg" src={data?.user?.image} />
-          </Link>
-        </Badge>
+        <Skeleton className="rounded-full" isLoaded={!isLoading}>
+          <Badge>
+            <Link href={`/user/${data?.user?._id}`}>
+              <Avatar size="lg" src={data?.user?.image} />
+            </Link>
+          </Badge>
+        </Skeleton>
       </CardHeader>
       <CardBody className="text-center">
         <p>{data?.user?.userName}</p>
