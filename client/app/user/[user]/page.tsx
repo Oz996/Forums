@@ -1,4 +1,5 @@
 "use client";
+import { getUser } from "@/app/api/api";
 import DeleteUserModal from "@/components/DeleteUserModal";
 import PostCard from "@/components/PostCard";
 import UserCard from "@/components/UserCard";
@@ -11,14 +12,13 @@ import { useState } from "react";
 import { ErrorMessage } from "@hookform/error-message";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { GetUser } from "@/app/api/routes";
 
 export default function User({ params }: { params: { user: string } }) {
   console.log(params.user);
   const [editing, setEditing] = useState(false);
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["user"],
-    queryFn: () => GetUser(params.user),
+    queryFn: () => getUser(params.user),
   });
 
   const { userEmail, token } = useAuth();
@@ -32,8 +32,8 @@ export default function User({ params }: { params: { user: string } }) {
   } = useForm();
 
   const handleEditClick = () => {
-    setValue("email", data?.user?.email || "");
-    setValue("userName", data?.user?.userName || "");
+    setValue("email", data?.data?.user?.email || "");
+    setValue("userName", data?.data?.user?.userName || "");
     setEditing((prev) => !prev);
   };
 
@@ -62,7 +62,7 @@ export default function User({ params }: { params: { user: string } }) {
     mutation.mutate(data as UserData);
   };
 
-  const email = data?.user?.email;
+  const email = data?.data?.user?.email;
 
   return (
     <section className="pt-24">
@@ -70,13 +70,13 @@ export default function User({ params }: { params: { user: string } }) {
         <Card className="md:p-10 md:px-20 p-3">
           <div className="flex justify-between flex-col md:flex-row gap-4">
             <div className="md:border-r-1">
-              <UserCard data={data} isLoading={isLoading} />
+              <UserCard data={data?.data} />
             </div>
             {!editing ? (
               <div className="grid grid-cols-2 my-auto gap-2">
                 <p className="font-semibold">Email</p> <p>{email}</p>
                 <p className="font-semibold">Username</p>{" "}
-                <p>{data?.user?.userName}</p>
+                <p>{data?.data?.user?.userName}</p>
                 {userEmail === email && (
                   <>
                     <Button
@@ -150,7 +150,7 @@ export default function User({ params }: { params: { user: string } }) {
           <h2 className="text-center text-xl font-semibold mb-5">
             {userEmail === email ? "Your Posts" : "Users Posts"}
           </h2>
-          {data?.posts?.map((post: Post) => (
+          {data?.data?.posts?.map((post: Post) => (
             <PostCard key={post?._id} post={post} />
           ))}
         </Card>
@@ -160,7 +160,7 @@ export default function User({ params }: { params: { user: string } }) {
               ? "Your Latest Comments"
               : "Users Latest Comments"}
           </h3>
-          {data?.comments?.map((comment: Comment) => (
+          {data?.data?.comments?.map((comment: Comment) => (
             <div key={comment?._id}>
               <p>{comment?.text}</p>
             </div>
