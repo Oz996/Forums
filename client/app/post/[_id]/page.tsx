@@ -2,7 +2,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
 import { getPost } from "../../api/api";
-import CommentForm from "@/components/CommentForm";
+import CommentForm from "@/app/post/[_id]/CommentForm";
 import { Button, Input, Textarea, input } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import DeleteModal from "@/components/DeleteModal";

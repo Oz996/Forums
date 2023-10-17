@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 
-const PostCard = ({ post }: {post: Post}) => {
+const PostCard = ({ post }: { post: Post }) => {
   const substring = () => {
     const body = post?.body;
     const bodyLength = post?.body.length > 200;
@@ -15,8 +15,11 @@ const PostCard = ({ post }: {post: Post}) => {
   };
 
   const body = substring();
-  console.log(post)
+  console.log(post);
   const { theme } = useTheme();
+
+  const isNew =
+    Date.now() - new Date(post?.createdAt).getTime() < 1000 * 60 * 60 * 24 * 3;
 
   return (
     <Link href={`/post/${post?._id}`}>
@@ -52,7 +55,16 @@ const PostCard = ({ post }: {post: Post}) => {
           </div>
         </CardHeader>
         <div className="lg:px-20 mt-10">
-          <p>{body}</p>
+          <p className="mb-3">{body}</p>
+          {isNew && (
+            <span
+              className={`p-2 px-3 rounded-full uppercase font-semibold ${
+                theme === "dark" ? "bg-gray-800" : "bg-slate-200"
+              }`}
+            >
+              new
+            </span>
+          )}
         </div>
       </Card>
     </Link>
