@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Categories, Post } from "@/types/types";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { FieldValues, useForm } from "react-hook-form";
@@ -12,8 +12,8 @@ import { useAuth } from "@/hooks/useAuth";
 const CreateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const {token} = useAuth()
-  
+  const { token, isAuthenticated } = useAuth();
+
   const categories: Categories[] = [
     { id: 0, value: "red", name: "Red" },
     { id: 1, value: "blue", name: "Blue" },
@@ -27,12 +27,19 @@ const CreateForm = () => {
   } = useForm<Post>();
 
   const newPostMutation = async (data: Post) => {
+    
+    if (!isAuthenticated) router.push("/login")
+
     setIsLoading(true);
-    const res = await axios.post("https://forums-api.onrender.com/posts/", data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.post(
+      "https://forums-api.onrender.com/posts/",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res.data;
   };
 
