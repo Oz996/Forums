@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { RegisterUser } from "@/types/types";
+import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function Register() {
 
   const registerMutation = async (data: RegisterUser) => {
     setIsLoading(true);
-    const res = await axios.post("http://localhost:3000/api/register", data);
+    const res = await axios.post(getBaseUrl() + "/api/register", data);
     return res.data;
   };
 

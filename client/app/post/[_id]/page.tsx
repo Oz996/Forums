@@ -11,6 +11,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { EditData, PostData, Comment } from "@/types/types";
+import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -40,7 +41,7 @@ export default function Page({ params }: { params: { _id: string } }) {
   };
 
   const editMutation = async (data: EditData) => {
-    await axios.put(`http://localhost:3000/api/post/${params._id}`, data, {
+    await axios.put(getBaseUrl() + `/api/post/${params._id}`, data, {
       headers: { Authorization: `Bearer ${token}` },
     });
   };
@@ -48,10 +49,9 @@ export default function Page({ params }: { params: { _id: string } }) {
   const deleteCommentMutation = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
-    await axios.delete(
-      `http://localhost:3000/api/post/${params._id}/comments/${9}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    await axios.delete(getBaseUrl() + `/api/post/${params._id}/comments/${9}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   };
 
   const mutation = useMutation(editMutation, {

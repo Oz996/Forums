@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Comment } from "@/types/types";
 import { useAuth } from "@/hooks/useAuth";
+import { getBaseUrl } from "@/lib/utils/URL";
 
 const CommentForm = ({ params }: { params: { _id: string } }) => {
   const {
@@ -25,7 +26,7 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
       userId,
     };
     const res = await axios.post(
-      `http://localhost:3000/api/post/${params._id}`,
+      getBaseUrl() + `/api/post/${params._id}`,
       postData,
       {
         headers: {

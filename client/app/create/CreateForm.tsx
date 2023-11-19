@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { getBaseUrl } from "@/lib/utils/URL";
 
 const CreateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +36,7 @@ const CreateForm = () => {
       ...data,
       userId,
     };
-    const res = await axios.post("http://localhost:3000/api/posts/", postData, {
+    const res = await axios.post(getBaseUrl() + "/api/posts/", postData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

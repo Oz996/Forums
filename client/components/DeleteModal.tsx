@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import { getBaseUrl } from "@/lib/utils/URL";
 import {
   Button,
   Modal,
@@ -12,21 +13,21 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const DeleteModal = ({ id }: {id: string}) => {
+const DeleteModal = ({ id }: { id: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const {token} = useAuth()
+  const { token } = useAuth();
 
   const deleteMutation = async () => {
-      const res = await axios.delete(`http://localhost:3000/api/post/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (res.status === 200) {
-        router.push("/");
-        toast.success("Post deleted");
-      }
+    const res = await axios.delete(getBaseUrl() + `/api/post/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 200) {
+      router.push("/");
+      toast.success("Post deleted");
+    }
   };
 
   return (

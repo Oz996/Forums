@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { User } from "@/types/types";
+import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function Login() {
   const loginMutation = async (data: User) => {
     setIsLoading(true);
     const res = await axios.post(
-      "http://localhost:3000/api/login",
+      getBaseUrl() + "/api/login",
       data
     );
     return res.data;

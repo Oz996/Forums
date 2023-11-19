@@ -21,6 +21,7 @@ import { useState } from "react";
 import { ErrorMessage } from "@hookform/error-message";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function User({ params }: { params: { id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -45,7 +46,7 @@ export default function User({ params }: { params: { id: string } }) {
 
   const userMutation = async (data: UserData) => {
     const res = await axios.put(
-      `http://localhost:3000/api/user/${params.id}`,
+      getBaseUrl() + `/api/user/${params.id}`,
       data,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -109,7 +110,7 @@ export default function User({ params }: { params: { id: string } }) {
                     </Popover>
                   </div>
                   <p
-                    className={`font-semibold ${
+                    className={`font-semibold self-center ${
                       member
                         ? "text-blue-600"
                         : regular

@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import { getBaseUrl } from "@/lib/utils/URL";
 import {
   Button,
   Modal,
@@ -18,12 +19,9 @@ const DeleteUserModal = ({ params }: { params: { id: String } }) => {
   const router = useRouter();
 
   const deleteMutation = async (e: React.MouseEvent) => {
-    const res = await axios.delete(
-      `http://localhost:3000/api/user/${params.id}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const res = await axios.delete(getBaseUrl() + `/api/user/${params.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (res.status === 200) {
       router.push("/");
       toast.success("User deleted");
