@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getPosts = async () => {
   try {
-    const data = await axios.get("http://localhost:3000/api/posts");
+    const data = await axios.get("https://next-forums.vercel.app/api/posts");
     return data;
   } catch (error) {
     console.error(error);
