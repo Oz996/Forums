@@ -4,7 +4,7 @@ export interface Theme {
 }
 
 export interface Post {
-  _id: string;
+  id: string;
   title: string;
   body: string;
   category: string;
@@ -15,13 +15,14 @@ export interface Post {
 }
 
 export interface User {
+  id: string;
   userName: string;
   email: string;
   password: string;
   image: string;
-  _id: string;
   createdAt: string;
   updatedAt: string;
+  posts: Post[]
 }
 
 export interface RegisterUser extends User {
@@ -55,8 +56,8 @@ export interface EditData {
 }
 
 export interface Comment {
-  _id: string;
-  text: string | number;
+  id: string;
+  body: string | number;
   createdAt: string;
   updatedAt: string;
   user: User;

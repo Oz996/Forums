@@ -18,7 +18,7 @@ const DeleteModal = ({ id }: {id: string}) => {
   const {token} = useAuth()
 
   const deleteMutation = async () => {
-      const res = await axios.delete(`https://forums-api.onrender.com/posts/${id}`, {
+      const res = await axios.delete(`http://localhost:3000/api/post/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

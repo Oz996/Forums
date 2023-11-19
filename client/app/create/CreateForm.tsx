@@ -12,7 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 const CreateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { token, isAuthenticated } = useAuth();
+  const { token, isAuthenticated, userId } = useAuth();
 
   const categories: Categories[] = [
     { id: 0, value: "red", name: "Red" },
@@ -27,19 +27,19 @@ const CreateForm = () => {
   } = useForm<Post>();
 
   const newPostMutation = async (data: Post) => {
-    
-    if (!isAuthenticated) router.push("/login")
+    if (!isAuthenticated) return router.push("/login");
 
     setIsLoading(true);
-    const res = await axios.post(
-      "https://forums-api.onrender.com/posts/",
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+
+    const postData = {
+      ...data,
+      userId,
+    };
+    const res = await axios.post("http://localhost:3000/api/posts/", postData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
   };
 

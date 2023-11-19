@@ -1,6 +1,11 @@
 import { useAuth } from "@/hooks/useAuth";
 import {
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -17,22 +22,32 @@ const UserMenu = () => {
     toast.success("Signed out");
   };
   return (
-    <Popover placement="bottom" showArrow={true}>
-      <PopoverTrigger>
-        <Button className="text-white" size="sm" variant="light">
+    <Dropdown>
+      <DropdownTrigger>
+        <Button isIconOnly className="text-white" size="sm" variant="light">
           <FaUser size={16} />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <div className="px-1 py-3 flex flex-col gap-3">
-          <div className="text-small font-bold">{userEmail}</div>
-            <Link href={`/user/${userId}`}>Edit User</Link>
+      </DropdownTrigger>
+      <DropdownMenu>
+        <DropdownSection showDivider>
+          <DropdownItem>
+            <div className="text-small font-bold">{userEmail}</div>
+          </DropdownItem>
+        </DropdownSection>
+        <DropdownItem>
+          <div className="w-full">
+            <Link className="w-full" href={`/user/${userId}`}>
+              Edit User
+            </Link>
+          </div>
+        </DropdownItem>
+        <DropdownItem>
           <div className="cursor-pointer" onClick={handleLogoutClick}>
             Logout
           </div>
-        </div>
-      </PopoverContent>
-    </Popover>
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
   );
 };
 

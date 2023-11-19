@@ -24,15 +24,13 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
   const registerMutation = async (data: RegisterUser) => {
     setIsLoading(true);
-    const res = await axios.post(
-      "https://forums-api.onrender.com/users/register",
-      data
-    );
+    const res = await axios.post("http://localhost:3000/api/register", data);
     return res.data;
   };
 
@@ -50,6 +48,11 @@ export default function Register() {
 
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as RegisterUser);
+  };
+
+  const validiatePassword = (value: string) => {
+    const password = watch("password");
+    return password === value || "Passwords no not match";
   };
 
   return (
@@ -81,7 +84,9 @@ export default function Register() {
           )}
         ></ErrorMessage>
         <Input
-          {...register("password", { required: "This field is required" })}
+          {...register("password", {
+            required: "This field is required",
+          })}
           type="password"
           label="Password"
         />
@@ -93,7 +98,10 @@ export default function Register() {
           )}
         ></ErrorMessage>
         <Input
-          {...register("Cpassword", { required: "This field is required" })}
+          {...register("Cpassword", {
+            required: "This field is required",
+            validate: validiatePassword,
+          })}
           type="password"
           label="Confirm Password"
         />

@@ -3,25 +3,33 @@ import { Avatar, Badge, Card, CardBody, CardHeader } from "@nextui-org/react";
 import Link from "next/link";
 
 interface props {
-  user: User;
-  posts?: Post[];
+  data: {
+    user: User;
+  };
 }
 
-const UserCard = ({ data }: { data: props }) => {
-  
-  const newbie =  data?.posts && data?.posts?.length < 1;
-  const member =  data?.posts && data?.posts?.length > 0 && data?.posts?.length < 3;
-  const regular = data?.posts &&  data?.posts?.length >= 3;
-
-  // console.log(data);
+const UserCard = ({ data }: props) => {
+  const numberOfPosts = data?.user?.posts?.length;
+  const newbie = numberOfPosts < 1;
+  const member = numberOfPosts > 0 && numberOfPosts < 3;
+  const regular = numberOfPosts >= 3;
+  const isNew =
+    Date.now() - new Date(data?.user?.createdAt).getTime() <
+    1000 * 60 * 60 * 24 * 1;
   return (
     <Card className="p-5 min-w-[15rem] h-full shadow-none border-b-1 border-gray-300 md:border-none">
       <CardHeader className="flex justify-center">
-        <Badge>
-          <Link href={`/user/${data?.user?._id}`}>
+        {isNew ? (
+          <Badge content="new" color="danger">
+            <Link href={`/user/${data?.user?.id}`}>
+              <Avatar size="lg" src={data?.user?.image} />
+            </Link>
+          </Badge>
+        ) : (
+          <Link href={`/user/${data?.user?.id}`}>
             <Avatar size="lg" src={data?.user?.image} />
           </Link>
-        </Badge>
+        )}
       </CardHeader>
       <CardBody className="text-center">
         <p>{data?.user?.userName}</p>
@@ -33,7 +41,7 @@ const UserCard = ({ data }: { data: props }) => {
           {newbie ? "Newbie" : member ? "Member" : regular ? "Regular" : ""}
         </p>
         <p></p>
-        <p>Posts: {data?.posts?.length}</p>
+        <p>Posts: {numberOfPosts}</p>
         <p>Joined: {data?.user?.createdAt?.slice(0, 10)}</p>
       </CardBody>
     </Card>

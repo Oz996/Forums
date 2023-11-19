@@ -14,7 +14,6 @@ export default function Home() {
   });
 
   const posts = data?.data || [];
-  console.log(posts);
 
   const categories: Categories[] = [
     { id: 0, value: "", name: "All" },
@@ -51,7 +50,7 @@ export default function Home() {
           <Spinner label="Loading..." color="secondary" />
         </div>
       ) : (
-        <div className="max-w-[62rem]">
+        <div className="lg:max-w-[62rem] w-full">
           {posts
             ?.filter((post: Post) => {
               const searchPost =
@@ -60,7 +59,7 @@ export default function Home() {
               return searchPost;
             })
             .map((post: Post) => (
-              <PostCard key={post._id} post={post} />
+              <PostCard key={post.id} post={post} />
             ))}
         </div>
       )}

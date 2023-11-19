@@ -2,7 +2,7 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { AuthContextProvider } from "../context/AuthContext";
+import { AuthContextProvider } from "../components/context/AuthContext";
 import Header from "@/components/Header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

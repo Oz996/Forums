@@ -12,18 +12,17 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { EditData, PostData, Comment } from "@/types/types";
 
-export default function Post({ params }: { params: { _id: string } }) {
+export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
   const queryClient = useQueryClient();
-  const { userEmail } = useAuth();
+  const { userEmail, userId } = useAuth();
   const { data, isLoading } = useQuery({
     queryKey: ["post"],
     queryFn: () => getPost(params._id),
   });
-  console.log(data);
 
-  const date = data?.data?.createdAt.slice(0, 10);
-  const updated = data?.data?.updatedAt.slice(0, 10);
+  const date = data?.data?.createdAt?.slice(0, 10);
+  const updated = data?.data?.updatedAt?.slice(0, 10);
 
   const { token } = useAuth();
 
@@ -41,18 +40,16 @@ export default function Post({ params }: { params: { _id: string } }) {
   };
 
   const editMutation = async (data: EditData) => {
-    await axios.put(
-      `https://forums-api.onrender.com/posts/${params._id}`,
-      data,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    await axios.put(`http://localhost:3000/api/post/${params._id}`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   };
 
   const deleteCommentMutation = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     await axios.delete(
-      `https://forums-api.onrender.com/posts/${params._id}/comments/${9}`,
+      `http://localhost:3000/api/post/${params._id}/comments/${9}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
   };
@@ -76,7 +73,7 @@ export default function Post({ params }: { params: { _id: string } }) {
 
   return (
     <section className="md:max-w-[62rem] mx-auto container pt-24 flex flex-col gap-10 md:gap-3">
-      <div className="flex flex-col md:flex-row md:rounded-xl border">
+      <div className="flex flex-col md:flex-row rounded-xl border">
         <div>
           <UserCard data={data?.data} />
         </div>
@@ -135,14 +132,14 @@ export default function Post({ params }: { params: { _id: string } }) {
       </div>
       {data?.data?.comments?.map((data: Comment) => (
         <div
-          key={data._id}
+          key={data.id}
           className="flex flex-col md:flex-row md:rounded-xl border w-full ml-auto md:w-[80%]"
         >
           <div>
             <UserCard data={data} />
           </div>
           <div className="flex flex-col p-10 w-full">
-            <p>{data?.text}</p>
+            <p>{data?.body}</p>
             {userEmail === data?.user?.email && (
               <div className="flex justify-end border-t mt-5">
                 <Button variant="light" className="mt-2">

@@ -1,5 +1,5 @@
 import { Post } from "@/types/types";
-import { Avatar, Card, CardHeader } from "@nextui-org/react";
+import { Avatar, Card, CardHeader, Chip } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,10 +19,10 @@ const PostCard = ({ post }: { post: Post }) => {
   const { theme } = useTheme();
 
   const isNew =
-    Date.now() - new Date(post?.createdAt).getTime() < 1000 * 60 * 60 * 24 * 3;
+    Date.now() - new Date(post?.createdAt).getTime() < 1000 * 60 * 60 * 24 * 1;
 
   return (
-    <Link href={`/post/${post?._id}`}>
+    <Link href={`/post/${post?.id}`}>
       <Card
         className={`p-10 m-3 mx-auto flex flex-col border-b-8 max-md:rounded hover:scale-[100.5%] duration-200 ${
           post?.category === "blue"
@@ -34,7 +34,7 @@ const PostCard = ({ post }: { post: Post }) => {
             : ""
         } ${theme === "dark" ? "hover:bg-gray-800" : "hover:bg-gray-100"} `}
       >
-        <CardHeader className="grid lg:grid-cols-3">
+        <CardHeader className="grid sm:grid-cols-3">
           <div>
             <Avatar size="lg" src={post?.user?.image} />
           </div>
@@ -44,26 +44,30 @@ const PostCard = ({ post }: { post: Post }) => {
               Posted by {post?.user?.userName}
             </p>
           </div>
-          <div className="flex justify-start md:justify-end items-center gap-1">
+          <div className="flex justify-start sm:justify-end items-center gap-1">
             <Image
               src="/message.svg"
               alt="message icon"
               width={35}
               height={35}
             />
-            <p className="font-semibold">{post?.comments.length}</p>
+            <p className="font-semibold">{post?.comments?.length}</p>
           </div>
         </CardHeader>
         <div className="lg:px-20 mt-10">
           <p className="mb-3">{body}</p>
           {isNew && (
-            <span
-              className={`p-2 px-3 rounded-full uppercase font-semibold ${
-                theme === "dark" ? "bg-gray-800" : "bg-slate-200"
+            <Chip
+              className={`text-white uppercase ${
+                post?.category === "red"
+                  ? "bg-red-500"
+                  : post?.category === "blue"
+                  ? "bg-blue-500"
+                  : "bg-yellow-500"
               }`}
             >
               new
-            </span>
+            </Chip>
           )}
         </div>
       </Card>

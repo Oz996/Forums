@@ -12,14 +12,14 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const DeleteUserModal = ({ id }: { id: String }) => {
+const DeleteUserModal = ({ params }: { params: { id: String } }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { handleLogout, token } = useAuth();
   const router = useRouter();
 
   const deleteMutation = async (e: React.MouseEvent) => {
     const res = await axios.delete(
-      `https://forums-api.onrender.com/users/${id}`,
+      `http://localhost:3000/api/user/${params.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -33,7 +33,12 @@ const DeleteUserModal = ({ id }: { id: String }) => {
 
   return (
     <>
-      <Button color="danger" onPress={onOpen}>
+      <Button
+        color="danger"
+        onPress={onOpen}
+        className="rounded-full"
+        variant="light"
+      >
         Delete User
       </Button>
       <Modal

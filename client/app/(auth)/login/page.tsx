@@ -32,7 +32,7 @@ export default function Login() {
   const loginMutation = async (data: User) => {
     setIsLoading(true);
     const res = await axios.post(
-      "https://forums-api.onrender.com/users/login",
+      "http://localhost:3000/api/login",
       data
     );
     return res.data;
