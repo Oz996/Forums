@@ -19,11 +19,17 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (!user) return null;
+    if (!user)
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
-    if (!passwordMatch) return null;
+    if (!passwordMatch) {
+      return NextResponse.json(
+        { message: "Invalid password" },
+        { status: 401 }
+      );
+    }
 
     const secretKey = process.env.SECRET_KEY;
 
