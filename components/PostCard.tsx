@@ -1,9 +1,10 @@
 import { Post } from "@/types";
-import { Avatar, Card, CardHeader, Chip } from "@nextui-org/react";
+import { Avatar, Card, CardHeader, Chip, Divider } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import classnames from "classnames";
+import UserAvatar from "./UserAvatar";
 
 const PostCard = ({ post }: { post: Post }) => {
   const substring = () => {
@@ -35,9 +36,9 @@ const PostCard = ({ post }: { post: Post }) => {
           "hover:bg-gray-100": theme !== "dark",
         })}
       >
-        <CardHeader className="grid sm:grid-cols-3">
+        <CardHeader className="flex gap-5 mb-2">
           <div>
-            <Avatar size="lg" src={post?.user?.image} />
+            <UserAvatar image={post?.user?.image} />
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-xl font-semibold">{post?.title}</p>
@@ -45,7 +46,7 @@ const PostCard = ({ post }: { post: Post }) => {
               Posted by {post?.user?.userName}
             </p>
           </div>
-          <div className="flex justify-start sm:justify-end items-center gap-1">
+          <div className="flex justify-start sm:justify-end items-center gap-1 ml-auto">
             <Image
               src="/message.svg"
               alt="message icon"
@@ -55,6 +56,7 @@ const PostCard = ({ post }: { post: Post }) => {
             <p className="font-semibold">{post?.comments?.length}</p>
           </div>
         </CardHeader>
+        <Divider />
         <div className="lg:px-20 mt-10">
           <p className="mb-3">{body}</p>
           {isNew && (

@@ -38,13 +38,13 @@ export default function Login() {
 
   const mutation = useMutation(loginMutation, {
     onSuccess: (data) => {
+      router.push("/home");
       setIsLoading(false);
       const token = data.token;
       const email = getValues("email");
       const userId = data.userId;
       handleLogin(email, token, userId);
       toast.success("Signed in");
-      router.push("/");
     },
     onError: (error) => {
       setIsLoading(false);

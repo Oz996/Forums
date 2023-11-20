@@ -83,7 +83,7 @@ export default function Page({ params }: { params: { _id: string } }) {
             {!editing ? (
               <div>
                 <Skeleton className="rounded-lg" isLoaded={!isLoading}>
-                  <h1 className="text-2xl text-center font-semibold mb-10">
+                  <h1 className="text-2xl font-semibold mb-10">
                     {post?.title}
                   </h1>
                 </Skeleton>

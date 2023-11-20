@@ -2,6 +2,7 @@ import { User } from "@/types";
 import { Avatar, Badge, Card, CardBody, CardHeader } from "@nextui-org/react";
 import Link from "next/link";
 import classnames from "classnames";
+import UserAvatar from "./UserAvatar";
 
 interface props {
   data: {
@@ -23,12 +24,12 @@ const UserCard = ({ data }: props) => {
         {isNew ? (
           <Badge content="new" color="danger">
             <Link href={`/user/${data?.user?.id}`}>
-              <Avatar size="lg" src={data?.user?.image} />
+              <UserAvatar image={data?.user?.image} />
             </Link>
           </Badge>
         ) : (
           <Link href={`/user/${data?.user?.id}`}>
-            <Avatar size="lg" src={data?.user?.image} />
+            <UserAvatar image={data?.user?.image} />
           </Link>
         )}
       </CardHeader>
