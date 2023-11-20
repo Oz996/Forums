@@ -18,7 +18,7 @@ export default function Register() {
   const router = useRouter();
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/");
+      router.push("/home");
     }
   }, [isAuthenticated, router]);
 

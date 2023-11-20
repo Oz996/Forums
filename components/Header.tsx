@@ -22,11 +22,12 @@ const Header = () => {
   if (!mounted) return null;
 
   return (
-    <Navbar
-      className="w-full h-[3rem] bg-primary-600 absolute top-0 left-0 items-center text-white duration-200"
-    >
+    <Navbar className="w-full h-[3rem] bg-primary-600 absolute top-0 left-0 items-center text-white duration-200">
       <NavbarBrand>
-        <Link className="uppercase text-3xl font-semibold" href="/">
+        <Link
+          className="uppercase text-3xl font-semibold"
+          href={isAuthenticated ? "/home" : "/"}
+        >
           posts
         </Link>
       </NavbarBrand>

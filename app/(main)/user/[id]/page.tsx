@@ -1,6 +1,6 @@
 "use client";
 import { getUser } from "@/app/api/api";
-import DeleteUserModal from "@/app/user/[id]/DeleteUserModal";
+import DeleteUserModal from "@/app/(main)/user/[id]/DeleteUserModal";
 import PostCard from "@/components/PostCard";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/hooks/useAuth";

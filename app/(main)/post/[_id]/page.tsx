@@ -1,11 +1,11 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
-import { getPost } from "../../api/api";
-import CommentForm from "@/app/post/[_id]/CommentForm";
+import { getPost } from "../../../api/api";
+import CommentForm from "@/app/(main)/post/[_id]/CommentForm";
 import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
-import DeleteModal from "@/app/post/[_id]/DeletePostModal";
+import DeleteModal from "@/app/(main)/post/[_id]/DeletePostModal";
 import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
