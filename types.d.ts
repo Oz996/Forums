@@ -9,7 +9,7 @@ export interface Post {
   body: string;
   category: string;
   createdAt: string;
-  updatedAt: string;
+  editedAt: string;
   user: User;
   comments: Comment[];
 }
@@ -21,7 +21,7 @@ export interface User {
   password: string;
   image: string;
   createdAt: string;
-  updatedAt: string;
+  editedAt: string;
   posts: Post[];
   ProfileCommentReceived: ProfileComment[];
 }
@@ -60,7 +60,7 @@ export interface Comment {
   id: string;
   body: string | number;
   createdAt: string;
-  updatedAt: string;
+  editedAt: string;
   user: User;
 }
 
@@ -68,7 +68,7 @@ export interface ProfileComment {
   id: string;
   body: string | number;
   createdAt: string;
-  updatedAt: string;
+  editedAt: string;
   sender: User;
 }
 

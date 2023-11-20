@@ -77,6 +77,7 @@ export async function PUT(
       data: {
         title,
         body,
+        editedAt: new Date(),
       },
     });
     return NextResponse.json(updatedPost, { status: 200 });

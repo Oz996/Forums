@@ -10,7 +10,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { EditData, PostData, Comment } from "@/types";
+import { EditData, PostData, Comment, Post } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Page({ params }: { params: { _id: string } }) {
@@ -22,10 +22,12 @@ export default function Page({ params }: { params: { _id: string } }) {
     queryFn: () => getPost(params._id),
   });
 
-  const date = data?.createdAt?.slice(0, 10);
-  const updated = data?.updatedAt?.slice(0, 10);
+  const post: Post = data;
+  const date = post?.createdAt?.slice(0, 10);
+  const updated = post?.editedAt?.slice(0, 10);
 
-  const post = data;
+  const edited = post?.createdAt !== post?.editedAt;
+  console.log(data);
 
   const { token } = useAuth();
 
@@ -72,6 +74,7 @@ export default function Page({ params }: { params: { _id: string } }) {
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as EditData);
   };
+
   return (
     <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
       <div className="flex flex-col md:flex-row rounded-xl border">
@@ -93,9 +96,11 @@ export default function Page({ params }: { params: { _id: string } }) {
                       <p className="text-gray-500 text-sm">Created at {date}</p>
                     </Skeleton>
                     <Skeleton className="rounded-lg" isLoaded={!isLoading}>
-                      <p className="text-gray-500 text-sm italic">
-                        Edited at {updated}
-                      </p>
+                      {edited && (
+                        <p className="text-gray-500 text-sm italic pr-2">
+                          Edited at {updated}
+                        </p>
+                      )}
                     </Skeleton>
                   </div>
                 )}
@@ -148,7 +153,7 @@ export default function Page({ params }: { params: { _id: string } }) {
           </div>
           <div className="flex flex-col p-10 w-full">
             <p>{data?.body}</p>
-            {userEmail === post?.email && (
+            {userEmail === post?.user?.email && (
               <div className="flex justify-end border-t mt-5">
                 <Button variant="light" className="mt-2">
                   {!editing ? "Edit" : "Confirm"}
