@@ -1,8 +1,9 @@
-import { Post } from "@/types/types";
+import { Post } from "@/types";
 import { Avatar, Card, CardHeader, Chip } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
+import classnames from "classnames";
 
 const PostCard = ({ post }: { post: Post }) => {
   const substring = () => {
@@ -24,15 +25,15 @@ const PostCard = ({ post }: { post: Post }) => {
   return (
     <Link href={`/post/${post?.id}`}>
       <Card
-        className={`p-10 m-3 mx-auto flex flex-col border-b-8 max-md:rounded hover:scale-[100.5%] duration-200 ${
-          post?.category === "blue"
-            ? "border-b-blue-500"
-            : post?.category === "red"
-            ? "border-b-red-500"
-            : post?.category === "yellow"
-            ? "border-b-yellow-400"
-            : ""
-        } ${theme === "dark" ? "hover:bg-gray-800" : "hover:bg-gray-100"} `}
+        className={classnames({
+          "p-10 m-3 mx-auto flex flex-col border-b-8 max-md:rounded hover:scale-[100.5%] duration-200":
+            true,
+          "border-b-blue-500": post?.category === "blue",
+          "border-b-red-500": post?.category === "red",
+          "border-b-yellow-400": post?.category === "yellow",
+          "hover:bg-gray-800": theme === "dark",
+          "hover:bg-gray-100": theme !== "dark",
+        })}
       >
         <CardHeader className="grid sm:grid-cols-3">
           <div>
@@ -58,13 +59,12 @@ const PostCard = ({ post }: { post: Post }) => {
           <p className="mb-3">{body}</p>
           {isNew && (
             <Chip
-              className={`text-white uppercase ${
-                post?.category === "red"
-                  ? "bg-red-500"
-                  : post?.category === "blue"
-                  ? "bg-blue-500"
-                  : "bg-yellow-500"
-              }`}
+              className={classnames({
+                "text-white uppercase": true,
+                "bg-red-500": post?.category === "red",
+                "bg-blue-500": post?.category === "blue",
+                "bg-yellow-500": post?.category === "yellow",
+              })}
             >
               new
             </Chip>

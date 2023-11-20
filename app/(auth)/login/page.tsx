@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { User } from "@/types/types";
+import { User } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Login() {
@@ -32,10 +32,7 @@ export default function Login() {
 
   const loginMutation = async (data: User) => {
     setIsLoading(true);
-    const res = await axios.post(
-      getBaseUrl() + "/api/login",
-      data
-    );
+    const res = await axios.post(getBaseUrl() + "/api/login", data);
     return res.data;
   };
 
@@ -44,7 +41,7 @@ export default function Login() {
       setIsLoading(false);
       const token = data.token;
       const email = getValues("email");
-      const userId =  data.userId
+      const userId = data.userId;
       handleLogin(email, token, userId);
       toast.success("Signed in");
       router.push("/");
@@ -91,7 +88,7 @@ export default function Login() {
           isLoading={isLoading}
           type="submit"
           className="w-full"
-          color="secondary"
+          color="primary"
         >
           Login
         </Button>

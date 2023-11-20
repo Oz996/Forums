@@ -13,31 +13,27 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const DeleteUserModal = ({ params }: { params: { id: String } }) => {
+const DeleteModal = ({ id }: { id: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { handleLogout, token } = useAuth();
   const router = useRouter();
+  const { token } = useAuth();
 
-  const deleteMutation = async (e: React.MouseEvent) => {
-    const res = await axios.delete(getBaseUrl() + `/api/user/${params.id}`, {
-      headers: { Authorization: `Bearer ${token}` },
+  const deleteMutation = async () => {
+    const res = await axios.delete(getBaseUrl() + `/api/post/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     if (res.status === 200) {
       router.push("/");
-      toast.success("User deleted");
-      handleLogout();
+      toast.success("Post deleted");
     }
   };
 
   return (
     <>
-      <Button
-        color="danger"
-        onPress={onOpen}
-        className="rounded-full"
-        variant="light"
-      >
-        Delete User
+      <Button className="mt-2" color="danger" variant="light" onPress={onOpen}>
+        Delete
       </Button>
       <Modal
         backdrop="opaque"
@@ -51,16 +47,13 @@ const DeleteUserModal = ({ params }: { params: { id: String } }) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                User Deletion
+              <ModalHeader className="flex flex-col gap-1 text-center">
+                Post Deletion
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Are you sure you want to delete your account? Account recovery
-                  will not be possible
-                </p>
+                <p>Are you sure you want to delete your post?</p>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="mx-auto">
                 <Button variant="light" onPress={onClose}>
                   Close
                 </Button>
@@ -81,4 +74,4 @@ const DeleteUserModal = ({ params }: { params: { id: String } }) => {
   );
 };
 
-export default DeleteUserModal;
+export default DeleteModal;

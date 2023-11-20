@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { User } from "@/types/types";
+import { User } from "@/types";
 import { hash } from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 

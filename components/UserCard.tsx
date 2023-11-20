@@ -1,6 +1,7 @@
-import { Post, User } from "@/types/types";
+import { User } from "@/types";
 import { Avatar, Badge, Card, CardBody, CardHeader } from "@nextui-org/react";
 import Link from "next/link";
+import classnames from "classnames";
 
 interface props {
   data: {
@@ -34,9 +35,11 @@ const UserCard = ({ data }: props) => {
       <CardBody className="text-center">
         <p>{data?.user?.userName}</p>
         <p
-          className={`font-semibold ${
-            member ? "text-blue-600" : regular ? "text-purple-600" : ""
-          }`}
+          className={classnames({
+            "font-semibold": true,
+            "text-blue-600": member,
+            "text-purple-600": regular,
+          })}
         >
           {newbie ? "Newbie" : member ? "Member" : regular ? "Regular" : ""}
         </p>

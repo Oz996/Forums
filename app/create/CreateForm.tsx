@@ -1,5 +1,5 @@
 "use client";
-import { Categories, Post } from "@/types/types";
+import { Categories, Post } from "@/types";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { FieldValues, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
@@ -110,7 +110,7 @@ const CreateForm = () => {
           isLoading={isLoading}
           type="submit"
           className="w-full"
-          color="secondary"
+          color="primary"
         >
           Post
         </Button>

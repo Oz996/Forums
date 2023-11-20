@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { User } from "@/types/types";
+import { User } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

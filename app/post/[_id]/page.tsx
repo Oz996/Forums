@@ -3,14 +3,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
 import { getPost } from "../../api/api";
 import CommentForm from "@/app/post/[_id]/CommentForm";
-import { Button, Input, Textarea, input } from "@nextui-org/react";
+import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
-import DeleteModal from "@/components/DeleteModal";
+import DeleteModal from "@/app/post/[_id]/DeletePostModal";
 import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { EditData, PostData, Comment } from "@/types/types";
+import { EditData, PostData, Comment } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Page({ params }: { params: { _id: string } }) {
@@ -70,9 +70,8 @@ export default function Page({ params }: { params: { _id: string } }) {
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as EditData);
   };
-
   return (
-    <section className="md:max-w-[62rem] mx-auto container pt-24 flex flex-col gap-10 md:gap-3">
+    <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
       <div className="flex flex-col md:flex-row rounded-xl border">
         <div>
           <UserCard data={data?.data} />
@@ -81,19 +80,26 @@ export default function Page({ params }: { params: { _id: string } }) {
           <div className="flex flex-col md:flex-row justify-between">
             {!editing ? (
               <div>
-                <h1 className="text-2xl text-center font-semibold mb-10">
-                  {data?.data?.title}
-                </h1>
+                <Skeleton className="rounded-lg" isLoaded={!isLoading}>
+                  <h1 className="text-2xl text-center font-semibold mb-10">
+                    {data?.data?.title}
+                  </h1>
+                </Skeleton>
                 {!editing && (
-                  <div className="flex  my-6 items-center gap-3">
-                    <p className="text-gray-500 text-sm">Created at {date}</p>
-                    <p className="text-gray-500 text-sm italic">
-                      Edited at {updated}
-                    </p>
+                  <div className="flex my-6 items-center gap-3">
+                    <Skeleton className="rounded-lg" isLoaded={!isLoading}>
+                      <p className="text-gray-500 text-sm">Created at {date}</p>
+                    </Skeleton>
+                    <Skeleton className="rounded-lg" isLoaded={!isLoading}>
+                      <p className="text-gray-500 text-sm italic">
+                        Edited at {updated}
+                      </p>
+                    </Skeleton>
                   </div>
                 )}
-
-                <p>{data?.data?.body}</p>
+                <Skeleton className="rounded-lg" isLoaded={!isLoading}>
+                  <p>{data?.data?.body}</p>
+                </Skeleton>
               </div>
             ) : (
               <form className="w-full" onSubmit={handleSubmit(onSubmit)}>

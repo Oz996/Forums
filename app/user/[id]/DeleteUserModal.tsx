@@ -13,27 +13,31 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const DeleteModal = ({ id }: { id: string }) => {
+const DeleteUserModal = ({ params }: { params: { id: String } }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { handleLogout, token } = useAuth();
   const router = useRouter();
-  const { token } = useAuth();
 
-  const deleteMutation = async () => {
-    const res = await axios.delete(getBaseUrl() + `/api/post/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const deleteMutation = async (e: React.MouseEvent) => {
+    const res = await axios.delete(getBaseUrl() + `/api/user/${params.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
     if (res.status === 200) {
       router.push("/");
-      toast.success("Post deleted");
+      toast.success("User deleted");
+      handleLogout();
     }
   };
 
   return (
     <>
-      <Button className="mt-2" color="danger" variant="light" onPress={onOpen}>
-        Delete
+      <Button
+        color="danger"
+        onPress={onOpen}
+        className="rounded-full"
+        variant="light"
+      >
+        Delete User
       </Button>
       <Modal
         backdrop="opaque"
@@ -47,13 +51,16 @@ const DeleteModal = ({ id }: { id: string }) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Post Deletion
+              <ModalHeader className="flex flex-col gap-1 text-center">
+                User Deletion
               </ModalHeader>
               <ModalBody>
-                <p>Are you sure you want to delete your post?</p>
+                <p>
+                  Are you sure you want to delete your account? Account recovery
+                  will not be possible
+                </p>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="mx-auto">
                 <Button variant="light" onPress={onClose}>
                   Close
                 </Button>
@@ -74,4 +81,4 @@ const DeleteModal = ({ id }: { id: string }) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteUserModal;

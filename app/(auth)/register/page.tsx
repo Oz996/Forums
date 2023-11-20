@@ -9,7 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
-import { RegisterUser } from "@/types/types";
+import { RegisterUser } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Register() {
@@ -118,7 +118,7 @@ export default function Register() {
           isLoading={isLoading}
           type="submit"
           className="w-full"
-          color="secondary"
+          color="primary"
         >
           Sign up
         </Button>

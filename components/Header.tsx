@@ -23,9 +23,7 @@ const Header = () => {
 
   return (
     <Navbar
-      className={`w-full h-[3rem] bg-purple-600 absolute top-0 left-0 items-center text-white duration-200 ${
-        theme === "dark" && "bg-purple-950"
-      }`}
+      className="w-full h-[3rem] bg-primary-600 absolute top-0 left-0 items-center text-white duration-200"
     >
       <NavbarBrand>
         <Link className="uppercase text-3xl font-semibold" href="/">
@@ -39,11 +37,7 @@ const Header = () => {
         </Link>
       </NavbarItem>
       <NavbarItem>
-        {isAuthenticated ? (
-         <UserMenu />
-        ) : (
-          <Link href="/login">Login</Link>
-        )}
+        {isAuthenticated ? <UserMenu /> : <Link href="/login">Login</Link>}
       </NavbarItem>
       <div className="cursor-pointer">
         {theme === "light" && (

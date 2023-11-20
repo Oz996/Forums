@@ -1,10 +1,10 @@
 "use client";
 import { getUser } from "@/app/api/api";
-import DeleteUserModal from "@/components/DeleteUserModal";
+import DeleteUserModal from "@/app/user/[id]/DeleteUserModal";
 import PostCard from "@/components/PostCard";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/hooks/useAuth";
-import { Comment, Post, UserData } from "@/types/types";
+import { Comment, Post, UserData } from "@/types";
 import { FaInfo } from "react-icons/fa";
 import {
   Avatar,
@@ -22,6 +22,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { getBaseUrl } from "@/lib/utils/URL";
+import classnames from "classnames";
 
 export default function User({ params }: { params: { id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -45,11 +46,9 @@ export default function User({ params }: { params: { id: string } }) {
   };
 
   const userMutation = async (data: UserData) => {
-    const res = await axios.put(
-      getBaseUrl() + `/api/user/${params.id}`,
-      data,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const res = await axios.put(getBaseUrl() + `/api/user/${params.id}`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   };
 
   const mutation = useMutation(userMutation, {
@@ -77,9 +76,9 @@ export default function User({ params }: { params: { id: string } }) {
   const regular = numberOfPosts >= 3;
 
   return (
-    <section className="pt-24 pb-10">
+    <section className="pb-10">
       <div className="md:max-w-[62rem] mx-auto flex flex-col gap-5">
-        <Card className="md:p-10 md:px-20 p-3">
+        <Card className="md:p-10 md:px-20 p-3 grid grid-cols-1 gap-10 lg:gap-0 lg:grid-cols-2">
           <div className="flex justify-between flex-col gap-4 mx-auto">
             <Avatar className="mx-auto w-28 h-28 mb-8" src={user?.image} />
             {!editing ? (
@@ -110,13 +109,11 @@ export default function User({ params }: { params: { id: string } }) {
                     </Popover>
                   </div>
                   <p
-                    className={`font-semibold self-center ${
-                      member
-                        ? "text-blue-600"
-                        : regular
-                        ? "text-purple-600"
-                        : ""
-                    }`}
+                    className={classnames({
+                      "font-semibold self-center": true,
+                      "text-blue-600": member,
+                      "text-purple-600": regular,
+                    })}
                   >
                     {newbie
                       ? "Newbie"
@@ -194,7 +191,7 @@ export default function User({ params }: { params: { id: string } }) {
                     <Button
                       className="w-[70%] rounded-full"
                       type="submit"
-                      color="secondary"
+                      color="primary"
                     >
                       Submit
                     </Button>
@@ -210,6 +207,9 @@ export default function User({ params }: { params: { id: string } }) {
                 </form>
               </div>
             )}
+          </div>
+          <div>
+            <h2 className="text-center text-xl font-semibold">Guestbook</h2>
           </div>
         </Card>
         <div>

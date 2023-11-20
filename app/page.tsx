@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "./api/api";
 import PostCard from "@/components/PostCard";
 import { Card, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
-import { Categories, Post } from "@/types/types";
+import { Categories, Post } from "@/types";
 import { useState } from "react";
 
 export default function Home() {
@@ -23,7 +23,7 @@ export default function Home() {
   ];
 
   return (
-    <section className="flex min-h-screen flex-col items-center pt-24">
+    <section className="flex min-h-screen flex-col items-center">
       <div className="md:w-[62rem] w-full">
         <Card className="p-10">
           <div className="flex flex-col md:flex-row gap-3">

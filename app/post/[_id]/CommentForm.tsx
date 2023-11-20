@@ -5,7 +5,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Comment } from "@/types/types";
+import { Comment } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { getBaseUrl } from "@/lib/utils/URL";
 
@@ -70,7 +70,7 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
 
         <div className="flex justify-between mt-5 items-center">
           <p>Characters left</p>
-          <Button type="submit" color="secondary" className="py-6">
+          <Button type="submit" color="primary" className="py-6">
             Post Comment
           </Button>
         </div>

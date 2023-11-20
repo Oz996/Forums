@@ -9,7 +9,6 @@ export const getPosts = async () => {
     console.error(error);
   }
 };
-// "https://next-forums.vercel.app/api/posts"
 
 export const getPost = async (id: string) => {
   try {
@@ -19,7 +18,7 @@ export const getPost = async (id: string) => {
     console.error(error);
   }
 };
-// `http://localhost:3000/api/post/${id}`
+
 export const getUser = async (id: string) => {
   try {
     const data = await axios.get(getBaseUrl() + `/api/user/${id}`);
@@ -28,4 +27,13 @@ export const getUser = async (id: string) => {
     console.error(error);
   }
 };
-// `http://localhost:3000/api/user/${id}`
+
+export const getOptions = async () => {
+  try {
+    const res = await axios.get(getBaseUrl() + "/api/membership");
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};

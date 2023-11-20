@@ -22,7 +22,7 @@ export interface User {
   image: string;
   createdAt: string;
   updatedAt: string;
-  posts: Post[]
+  posts: Post[];
 }
 
 export interface RegisterUser extends User {
@@ -61,4 +61,12 @@ export interface Comment {
   createdAt: string;
   updatedAt: string;
   user: User;
+}
+
+export interface Membership {
+  id: string;
+  option: string;
+  price: number;
+  description: string;
+  features: string[];
 }
