@@ -19,6 +19,8 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import Link from "next/link";
+import { useTheme } from "next-themes";
+import classnames from "classnames";
 
 interface props {
   user: User;
@@ -28,6 +30,7 @@ interface props {
 const Guestbook = ({ user, params }: props) => {
   const [isLoading, setIsLoading] = useState(false);
   const { isAuthenticated, userId } = useAuth();
+  const { theme } = useTheme();
   const router = useRouter();
 
   const queryClient = useQueryClient();
@@ -76,18 +79,34 @@ const Guestbook = ({ user, params }: props) => {
   return (
     <div className="flex flex-col gap-5 lg:max-h-[31rem]">
       <h2 className="text-center text-xl font-semibold">Guestbook</h2>
-      <div className="overflow-y-scroll h-full p-2 flex flex-col gap-5 bg-zinc-100 rounded-2xl">
+      <div
+        className={classnames({
+          "overflow-y-scroll h-full p-2 flex flex-col gap-5 bg-zinc-100 rounded-2xl":
+            true,
+          "bg-zinc-900": theme === "dark",
+        })}
+      >
         {comments?.map((comment) => (
           <div key={comment?.id} className="flex gap-3">
             <Link href={comment?.sender?.id}>
               <Avatar src={comment?.sender?.image} alt="" />
             </Link>
-            <div className="flex flex-col w-full bg-white p-4 rounded-lg">
+            <div
+              className={classnames({
+                "flex flex-col w-full bg-white p-4 rounded-lg": true,
+                "bg-zinc-700": theme === "dark",
+              })}
+            >
               <div className="flex gap-2 items-end">
                 <Link href={comment?.sender?.id}>
                   <p className="font-semibold">{comment?.sender?.userName}</p>
                 </Link>
-                <p className="ml-auto text-sm text-zinc-600">
+                <p
+                  className={classnames({
+                    "ml-auto text-sm": true,
+                    "text-white": theme === "dark",
+                  })}
+                >
                   {comment?.createdAt.slice(0, 10)}
                 </p>
               </div>
