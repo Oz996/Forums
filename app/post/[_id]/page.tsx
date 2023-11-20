@@ -22,8 +22,10 @@ export default function Page({ params }: { params: { _id: string } }) {
     queryFn: () => getPost(params._id),
   });
 
-  const date = data?.data?.createdAt?.slice(0, 10);
-  const updated = data?.data?.updatedAt?.slice(0, 10);
+  const date = data?.createdAt?.slice(0, 10);
+  const updated = data?.updatedAt?.slice(0, 10);
+
+  const post = data;
 
   const { token } = useAuth();
 
@@ -35,8 +37,8 @@ export default function Page({ params }: { params: { _id: string } }) {
   } = useForm();
 
   const handleEditClick = () => {
-    setValue("title", data?.data?.title || "");
-    setValue("body", data?.data?.body || "");
+    setValue("title", post?.title || "");
+    setValue("body", post?.body || "");
     setEditing((prev) => !prev);
   };
 
@@ -74,7 +76,7 @@ export default function Page({ params }: { params: { _id: string } }) {
     <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
       <div className="flex flex-col md:flex-row rounded-xl border">
         <div>
-          <UserCard data={data?.data} />
+          <UserCard data={data} />
         </div>
         <div className="flex flex-col p-10 w-full">
           <div className="flex flex-col md:flex-row justify-between">
@@ -82,7 +84,7 @@ export default function Page({ params }: { params: { _id: string } }) {
               <div>
                 <Skeleton className="rounded-lg" isLoaded={!isLoading}>
                   <h1 className="text-2xl text-center font-semibold mb-10">
-                    {data?.data?.title}
+                    {post?.title}
                   </h1>
                 </Skeleton>
                 {!editing && (
@@ -98,7 +100,7 @@ export default function Page({ params }: { params: { _id: string } }) {
                   </div>
                 )}
                 <Skeleton className="rounded-lg" isLoaded={!isLoading}>
-                  <p>{data?.data?.body}</p>
+                  <p>{post?.body}</p>
                 </Skeleton>
               </div>
             ) : (
@@ -122,7 +124,7 @@ export default function Page({ params }: { params: { _id: string } }) {
               </form>
             )}
           </div>
-          {userEmail === data?.data?.user?.email && (
+          {userEmail === post?.user?.email && (
             <div className="flex justify-end border-t mt-5">
               <Button
                 variant="light"
@@ -136,7 +138,7 @@ export default function Page({ params }: { params: { _id: string } }) {
           )}
         </div>
       </div>
-      {data?.data?.comments?.map((data: Comment) => (
+      {post?.comments?.map((data: Comment) => (
         <div
           key={data.id}
           className="flex flex-col md:flex-row md:rounded-xl border w-full ml-auto md:w-[80%]"
@@ -146,7 +148,7 @@ export default function Page({ params }: { params: { _id: string } }) {
           </div>
           <div className="flex flex-col p-10 w-full">
             <p>{data?.body}</p>
-            {userEmail === data?.user?.email && (
+            {userEmail === post?.email && (
               <div className="flex justify-end border-t mt-5">
                 <Button variant="light" className="mt-2">
                   {!editing ? "Edit" : "Confirm"}

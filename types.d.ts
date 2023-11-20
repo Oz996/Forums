@@ -23,6 +23,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   posts: Post[];
+  ProfileCommentReceived: ProfileComment[];
 }
 
 export interface RegisterUser extends User {
@@ -61,6 +62,14 @@ export interface Comment {
   createdAt: string;
   updatedAt: string;
   user: User;
+}
+
+export interface ProfileComment {
+  id: string;
+  body: string | number;
+  createdAt: string;
+  updatedAt: string;
+  sender: User;
 }
 
 export interface Membership {

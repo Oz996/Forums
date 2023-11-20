@@ -46,11 +46,12 @@ const CreateForm = () => {
 
   const mutation = useMutation(newPostMutation, {
     onSuccess: (data) => {
-      setIsLoading(false);
       router.push("/");
     },
     onError: (error) => {
       console.error(error);
+    },
+    onSettled: () => {
       setIsLoading(false);
     },
   });

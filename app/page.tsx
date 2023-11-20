@@ -13,7 +13,7 @@ export default function Home() {
     queryFn: getPosts,
   });
 
-  const posts = data?.data || [];
+  const posts = data || [];
 
   const categories: Categories[] = [
     { id: 0, value: "", name: "All" },

@@ -14,6 +14,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Textarea,
 } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -23,6 +24,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { getBaseUrl } from "@/lib/utils/URL";
 import classnames from "classnames";
+import Guestbook from "./Guestbook";
 
 export default function User({ params }: { params: { id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -67,7 +69,7 @@ export default function User({ params }: { params: { id: string } }) {
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as UserData);
   };
-  const user = data?.data;
+  const user = data;
   const numberOfPosts = user?.posts?.length;
   const email = user?.email;
   const isUser = userEmail === email;
@@ -78,9 +80,9 @@ export default function User({ params }: { params: { id: string } }) {
   return (
     <section className="pb-10">
       <div className="md:max-w-[62rem] mx-auto flex flex-col gap-5">
-        <Card className="md:p-10 md:px-20 p-3 grid grid-cols-1 gap-10 lg:gap-0 lg:grid-cols-2">
-          <div className="flex justify-between flex-col gap-4 mx-auto">
-            <Avatar className="mx-auto w-28 h-28 mb-8" src={user?.image} />
+        <Card className="md:p-10 p-3 grid grid-cols-1 gap-10 lg:gap-0 lg:grid-cols-2 lg:h-[35rem]">
+          <div className="flex flex-col gap-4 justify-center items-center">
+            <Avatar className="mx-auto w-28 h-28" src={user?.image} />
             {!editing ? (
               <div>
                 <div className="grid grid-cols-2 gap-2">
@@ -159,6 +161,7 @@ export default function User({ params }: { params: { id: string } }) {
                     {...register("email", {
                       required: "Email cannot be empty",
                     })}
+                    type="email"
                     label="Email"
                     defaultValue=" "
                   />
@@ -175,6 +178,7 @@ export default function User({ params }: { params: { id: string } }) {
                     {...register("userName", {
                       required: "Username cannot be empty",
                     })}
+                    type="text"
                     defaultValue=" "
                     label="Username"
                   />
@@ -208,9 +212,7 @@ export default function User({ params }: { params: { id: string } }) {
               </div>
             )}
           </div>
-          <div>
-            <h2 className="text-center text-xl font-semibold">Guestbook</h2>
-          </div>
+          <Guestbook user={user} params={params} />
         </Card>
         <div>
           {user?.posts.length === 0 ? (

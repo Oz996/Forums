@@ -11,6 +11,11 @@ export async function GET(
         id: params.id,
       },
       include: {
+        ProfileCommentReceived: {
+          include: {
+            sender: true,
+          },
+        },
         comments: true,
         posts: {
           include: {
@@ -77,11 +82,17 @@ export async function DELETE(
         userId: params.id,
       },
     });
+    const deleteUsersProfileComments = await prisma.profileComment.deleteMany({
+      where: {
+        userId: params.id,
+      },
+    });
     const deleteUser = await prisma.user.delete({
       where: {
         id: params.id,
       },
     });
+
     return NextResponse.json(
       { message: "User has been deleted" },
       { status: 200 }
@@ -90,6 +101,53 @@ export async function DELETE(
     console.error(error);
     return NextResponse.json(
       { message: "Failed to delete user", error },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const Body = await req.json();
+    const { body, userId } = Body;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { message: "Sender not found" },
+        { status: 404 }
+      );
+    }
+
+    const profileComment = await prisma.profileComment.create({
+      data: {
+        receiver: {
+          connect: { id: params.id },
+        },
+        sender: {
+          connect: { id: userId },
+        },
+        body,
+      },
+    });
+
+    const res = {
+      ...profileComment,
+      user,
+    };
+    return NextResponse.json(res, { status: 201 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Failed to post profile comment", error },
       { status: 500 }
     );
   }
