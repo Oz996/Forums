@@ -14,13 +14,25 @@ import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const [membership, setMembership] = useState(false);
+  const { isAuthenticated, premium, setPremium } = useAuth();
+
   const router = useRouter();
   useEffect(() => {
     if (isAuthenticated) {
       router.push("/home");
     }
   }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    if (premium) {
+      setMembership(true);
+    } else {
+      setMembership(false);
+    }
+  }, [premium]);
+
+  console.log(membership, "22");
 
   const {
     register,
@@ -31,13 +43,15 @@ export default function Register() {
 
   const registerMutation = async (data: RegisterUser) => {
     setIsLoading(true);
-    const res = await axios.post(getBaseUrl() + "/api/register", data);
+    const postdata = membership ? { ...data, isPremium: true } : data;
+    const res = await axios.post(getBaseUrl() + "/api/register", postdata);
     return res.data;
   };
 
   const mutation = useMutation(registerMutation, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       setIsLoading(false);
+      setPremium(false);
       router.push("/login");
       toast.success("Signed up");
     },
@@ -54,6 +68,15 @@ export default function Register() {
   const validiatePassword = (value: string) => {
     const password = watch("password");
     return password === value || "Passwords no not match";
+  };
+
+  const validateCard = (value: string) => {
+    const pattern =
+      /^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/;
+    return (
+      pattern.test(value) ||
+      "Invalid card number format (e.g., XXXX-XXXX-XXXX-XXXX)"
+    );
   };
 
   return (
@@ -114,6 +137,39 @@ export default function Register() {
           )}
         ></ErrorMessage>
         <Input {...register("image")} type="text" label="Image (optional)" />
+        {membership && (
+          <>
+            <Input
+              {...register("cardName", {
+                required: "This field is required",
+              })}
+              type="text"
+              label="Cardholder Name"
+            />
+            <ErrorMessage
+              errors={errors}
+              name="cardName"
+              render={({ message }) => (
+                <p className="text-red-500 text-sm font-semibold">{message}</p>
+              )}
+            ></ErrorMessage>
+            <Input
+              {...register("cardNumber", {
+                required: "This field is required.",
+                validate: validateCard,
+              })}
+              type="text"
+              label="Card Number"
+            />
+            <ErrorMessage
+              errors={errors}
+              name="cardNumber"
+              render={({ message }) => (
+                <p className="text-red-500 text-sm font-semibold">{message}</p>
+              )}
+            ></ErrorMessage>
+          </>
+        )}
         <Button
           isLoading={isLoading}
           type="submit"

@@ -1,9 +1,15 @@
 import { Avatar } from "@nextui-org/react";
 import React from "react";
 
-const UserAvatar = ({ image }: { image: string }) => {
+interface props {
+  image: string;
+  className?: string;
+}
+
+const UserAvatar = ({ image, className }: props) => {
   return (
     <Avatar
+      className={className}
       size="lg"
       src={
         image === ""

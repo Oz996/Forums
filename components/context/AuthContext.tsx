@@ -7,6 +7,8 @@ interface AuthContextType {
   userEmail: string | null;
   token: string | null;
   userId: string | null;
+  premium: boolean;
+  setPremium: (value: boolean) => void;
   handleLogin: (email: string, token: string, userId: string) => void;
   handleLogout: () => void;
 }
@@ -16,7 +18,9 @@ const initialState: AuthContextType = {
   userEmail: null,
   token: null,
   userId: null,
-  handleLogin: (email: string, token: string) => {},
+  premium: false,
+  setPremium: (value: boolean) => {},
+  handleLogin: (value: string) => {},
   handleLogout: () => {},
 };
 
@@ -31,6 +35,9 @@ export const AuthContextProvider = ({
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [premium, setPremium] = useState(false);
+
+  console.log(premium);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -42,7 +49,28 @@ export const AuthContextProvider = ({
     setUserEmail(email);
   }, [isAuthenticated]);
 
-  const handleLogin = (email: string, token: string, userId: string) => {
+  useEffect(() => {
+    if (premium) {
+      localStorage.setItem("premium", "true");
+    }
+  }, [premium]);
+
+  useEffect(() => {
+    const isPremium = localStorage.getItem("premium");
+    const userPremium = isPremium === "true";
+    setPremium(userPremium);
+  }, []);
+
+  const handleLogin = (
+    email: string,
+    token: string,
+    userId: string,
+    premium?: string
+  ) => {
+    if (premium) {
+      setPremium(true);
+      localStorage.setItem("premium", "true");
+    }
     setIsAuthenticated(true);
     localStorage.setItem("token", token);
     localStorage.setItem("email", email);
@@ -54,18 +82,19 @@ export const AuthContextProvider = ({
   };
 
   const handleLogout = () => {
+    setPremium(false);
     setIsAuthenticated(false);
     localStorage.removeItem("token");
     localStorage.removeItem("email");
     setUserEmail(null);
     setToken(null);
   };
-  useEffect(() => {
-    console.log(userEmail);
-  }, [userEmail]);
+
   return (
     <AuthContext.Provider
       value={{
+        premium,
+        setPremium,
         isAuthenticated,
         userEmail,
         userId,

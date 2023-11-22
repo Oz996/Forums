@@ -24,10 +24,13 @@ export interface User {
   editedAt: string;
   posts: Post[];
   ProfileCommentReceived: ProfileComment[];
+  isPremium: boolean;
 }
 
 export interface RegisterUser extends User {
   Cpassword: string;
+  cardName?: string;
+  cardNumber?: string;
 }
 
 export interface Categories {

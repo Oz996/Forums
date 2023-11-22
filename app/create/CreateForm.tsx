@@ -46,7 +46,7 @@ const CreateForm = () => {
 
   const mutation = useMutation(newPostMutation, {
     onSuccess: (data) => {
-      router.push("/");
+      router.push("/home");
     },
     onError: (error) => {
       console.error(error);

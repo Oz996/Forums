@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const body: User = await req.json();
-    const { userName, email, password, image } = body;
+    const { userName, email, password, image, isPremium } = body;
 
     const hashedPassword = await hash(password, 10);
 
@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
         email,
         password: hashedPassword,
         image,
+        premium: isPremium ? true : false,
       },
     });
     return NextResponse.json(newUser, { status: 201 });

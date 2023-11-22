@@ -45,8 +45,8 @@ export const getGuestbook = async (id: string) => {
   try {
     const res = await axios.get(getBaseUrl() + "/api/membership");
     const data = res.data;
-    return data
+    return data;
   } catch (error) {
     console.error(error);
   }
-}
+};
