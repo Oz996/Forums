@@ -9,7 +9,12 @@ interface AuthContextType {
   userId: string | null;
   premium: boolean;
   setPremium: (value: boolean) => void;
-  handleLogin: (email: string, token: string, userId: string) => void;
+  handleLogin: (
+    email: string,
+    token: string,
+    userId: string,
+    premium: boolean
+  ) => void;
   handleLogout: () => void;
 }
 
@@ -20,7 +25,7 @@ const initialState: AuthContextType = {
   userId: null,
   premium: false,
   setPremium: (value: boolean) => {},
-  handleLogin: (value: string) => {},
+  handleLogin: (value: string | boolean) => {},
   handleLogout: () => {},
 };
 
@@ -65,12 +70,8 @@ export const AuthContextProvider = ({
     email: string,
     token: string,
     userId: string,
-    premium?: string
+    premium: boolean
   ) => {
-    if (premium) {
-      setPremium(true);
-      localStorage.setItem("premium", "true");
-    }
     setIsAuthenticated(true);
     localStorage.setItem("token", token);
     localStorage.setItem("email", email);
@@ -79,15 +80,22 @@ export const AuthContextProvider = ({
     setToken(token);
     setUserId(userId);
     setUserEmail(email);
+
+    if (premium) {
+      setPremium(true);
+      localStorage.setItem("premium", "true");
+    } else {
+      setPremium(false);
+      localStorage.removeItem("premium");
+    }
   };
 
   const handleLogout = () => {
     setPremium(false);
     setIsAuthenticated(false);
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
     setUserEmail(null);
     setToken(null);
+    localStorage.clear();
   };
 
   return (

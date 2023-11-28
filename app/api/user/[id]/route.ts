@@ -44,7 +44,7 @@ export async function PUT(
 ) {
   try {
     const body = await req.json();
-    const { email, userName, password } = body;
+    const { email, userName, password, isPremium } = body;
 
     const updatedUser = await prisma.user.update({
       where: {
@@ -54,6 +54,7 @@ export async function PUT(
         email,
         userName,
         password,
+        premium: isPremium ? true : false,
       },
     });
     return NextResponse.json(updatedUser, { status: 200 });

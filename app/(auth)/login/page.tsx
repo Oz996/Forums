@@ -43,8 +43,10 @@ export default function Login() {
       const token = data.token;
       const email = getValues("email");
       const userId = data.userId;
-      handleLogin(email, token, userId);
+      const premium = data.premium;
+      handleLogin(email, token, userId, premium);
       toast.success("Signed in");
+      console.log("data", data);
     },
     onError: (error) => {
       setIsLoading(false);

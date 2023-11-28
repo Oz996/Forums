@@ -6,21 +6,19 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
-import { FaUser } from "react-icons/fa";
+import { FaPlus, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const UserMenu = () => {
-  const { userEmail, userId, handleLogout } = useAuth();
+  const { userEmail, userId, handleLogout, premium } = useAuth();
 
   const handleLogoutClick = () => {
     handleLogout();
     toast.success("Signed out");
   };
+
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -41,6 +39,19 @@ const UserMenu = () => {
             </Link>
           </div>
         </DropdownItem>
+        {!premium && (
+          <DropdownItem>
+            <div className="w-full">
+              <Link
+                className="w-full flex gap-1 items-center"
+                href={"/upgrade"}
+              >
+                <FaPlus />
+                <p>Upgrade</p>
+              </Link>
+            </div>
+          </DropdownItem>
+        )}
         <DropdownItem>
           <div className="cursor-pointer" onClick={handleLogoutClick}>
             Logout

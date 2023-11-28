@@ -11,6 +11,10 @@ import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { RegisterUser } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
+import {
+  validateCardName,
+  validateCardNumber,
+} from "@/lib/utils/cardValidator";
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +56,7 @@ export default function Register() {
     onSuccess: () => {
       setIsLoading(false);
       setPremium(false);
+      localStorage.removeItem("premium");
       router.push("/login");
       toast.success("Signed up");
     },
@@ -68,15 +73,6 @@ export default function Register() {
   const validiatePassword = (value: string) => {
     const password = watch("password");
     return password === value || "Passwords no not match";
-  };
-
-  const validateCard = (value: string) => {
-    const pattern =
-      /^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/;
-    return (
-      pattern.test(value) ||
-      "Invalid card number format (e.g., XXXX-XXXX-XXXX-XXXX)"
-    );
   };
 
   return (
@@ -142,6 +138,7 @@ export default function Register() {
             <Input
               {...register("cardName", {
                 required: "This field is required",
+                validate: validateCardName,
               })}
               type="text"
               label="Cardholder Name"
@@ -156,7 +153,7 @@ export default function Register() {
             <Input
               {...register("cardNumber", {
                 required: "This field is required.",
-                validate: validateCard,
+                validate: validateCardNumber,
               })}
               type="text"
               label="Card Number"

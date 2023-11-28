@@ -37,7 +37,9 @@ export async function POST(req: NextRequest) {
       expiresIn: "1h",
     });
 
-    return NextResponse.json({ token, userId: user.id });
+    const isPremium = user.premium ? true : false;
+
+    return NextResponse.json({ token, userId: user.id, premium: isPremium });
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to authenticate user", error },
