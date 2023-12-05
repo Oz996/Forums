@@ -51,6 +51,7 @@ export default function User({ params }: { params: { id: string } }) {
     const res = await axios.put(getBaseUrl() + `/api/user/${params.id}`, data, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    console.log(res);
   };
 
   const mutation = useMutation(userMutation, {

@@ -17,7 +17,7 @@ export default function Page() {
   });
   console.log(data);
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setPremium } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,7 +25,10 @@ export default function Page() {
     }
   }, [isAuthenticated, router]);
 
-  const { setPremium } = useAuth();
+  useEffect(() => {
+    setPremium(false);
+    localStorage.removeItem("premium");
+  }, []);
 
   return (
     <section className="container mx-auto pb-5 lg:pb-0 pt-10">
@@ -111,7 +114,9 @@ export default function Page() {
                     "hover:border-primary-600 hover:bg-primary-600 hover:text-white":
                       option.option === "regular",
                   })}
-                  onClick={() => setPremium(true)}
+                  onClick={() =>
+                    option.option === "premium" && setPremium(true)
+                  }
                 >
                   Choose Plan
                 </Button>
