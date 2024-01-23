@@ -8,12 +8,12 @@ import { useState } from "react";
 
 export default function Home() {
   const [search, setSearch] = useState("");
-  const { data, isLoading } = useQuery({
+  const { data: posts, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: getPosts,
   });
 
-  const posts = data || [];
+  console.log(search);
 
   const categories: Categories[] = [
     { id: 0, value: "", name: "All" },
@@ -22,13 +22,17 @@ export default function Home() {
     { id: 3, value: "yellow", name: "Yellow" },
   ];
 
+  console.log(posts);
   return (
     <section className="flex min-h-screen flex-col items-center">
       <div className="md:w-[62rem] w-full">
         <Card className="p-10">
           <div className="flex flex-col md:flex-row gap-3">
             <div className="md:w-[30%]">
-              <Select label="Select Category">
+              <Select
+                label="Select Category"
+                onChange={(e) => setSearch(e.target.value)}
+              >
                 {categories.map((category) => (
                   <SelectItem key={category.value} value={category.value}>
                     {category.name}
@@ -55,9 +59,11 @@ export default function Home() {
             ?.filter((post: Post) => {
               const searchPost =
                 search.trim() === "" ||
-                post?.title.toLowerCase().includes(search.toLowerCase());
+                post?.title.toLowerCase().includes(search.toLowerCase()) ||
+                post?.category.toLowerCase().includes(search.toLowerCase());
               return searchPost;
             })
+            .reverse()
             .map((post: Post) => (
               <PostCard key={post.id} post={post} />
             ))}

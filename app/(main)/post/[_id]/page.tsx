@@ -79,32 +79,45 @@ export default function Page({ params }: { params: { _id: string } }) {
     <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
       <div className="flex flex-col md:flex-row rounded-xl border">
         <div>
-          <UserCard data={data} />
+          <UserCard data={data} isLoading={isLoading} />
         </div>
         <div className="flex flex-col p-10 w-full">
           <div className="flex flex-col md:flex-row justify-between">
             {!editing ? (
               <div>
-                <Skeleton className="rounded-lg" isLoaded={!isLoading}>
+                <Skeleton
+                  className={
+                    isLoading
+                      ? "rounded-lg w-full md:w-[30rem] lg:w-[40rem]"
+                      : ""
+                  }
+                  isLoaded={!isLoading}
+                >
                   <h1 className="text-2xl font-semibold mb-10">
                     {post?.title}
                   </h1>
                 </Skeleton>
                 {!editing && (
                   <div className="flex my-6 items-center gap-3">
-                    <Skeleton className="rounded-lg" isLoaded={!isLoading}>
+                    {!isLoading && (
                       <p className="text-gray-500 text-sm">Created at {date}</p>
-                    </Skeleton>
-                    <Skeleton className="rounded-lg" isLoaded={!isLoading}>
-                      {edited && (
-                        <p className="text-gray-500 text-sm italic pr-2">
-                          Edited at {updated}
-                        </p>
-                      )}
-                    </Skeleton>
+                    )}
+
+                    {edited && (
+                      <p className="text-gray-500 text-sm italic pr-2">
+                        Edited at {updated}
+                      </p>
+                    )}
                   </div>
                 )}
-                <Skeleton className="rounded-lg" isLoaded={!isLoading}>
+                <Skeleton
+                  className={
+                    isLoading
+                      ? "rounded-lg h-[12rem] w-full md:w-[30rem] lg:w-[40rem]"
+                      : ""
+                  }
+                  isLoaded={!isLoading}
+                >
                   <p>{post?.body}</p>
                 </Skeleton>
               </div>
