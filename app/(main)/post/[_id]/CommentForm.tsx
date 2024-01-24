@@ -54,7 +54,7 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
   };
   return (
     <section className="p-10 md:rounded-xl border">
-      <h2 className="font-bold text-xl">Add Comment</h2>
+      <h2 className="font-semibold text-lg">Add Comment</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Textarea
           {...register("body", { required: "Comment can not be empty" })}

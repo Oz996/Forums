@@ -62,7 +62,7 @@ const CreateForm = () => {
 
   return (
     <div className="mx-auto max-w-[30rem] mt-10 rounded-xl border shadow-lg p-10">
-      <h1></h1>
+      <h1 className="text-center font-semibold text-xl"></h1>
       <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
         <Select
           {...register("category", { required: "Select a category" })}

@@ -159,7 +159,7 @@ export default function Page({ params }: { params: { _id: string } }) {
       {post?.comments?.map((data: Comment) => (
         <div
           key={data.id}
-          className="flex flex-col md:flex-row md:rounded-xl border w-full ml-auto md:w-[80%]"
+          className="flex flex-col md:flex-row md:rounded-xl border w-full "
         >
           <div>
             <UserCard data={data} />
