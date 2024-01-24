@@ -5,13 +5,13 @@ import { getPost } from "../../../api/api";
 import CommentForm from "@/app/(main)/post/[_id]/CommentForm";
 import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
-import DeleteModal from "@/app/(main)/post/[_id]/DeletePostModal";
 import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { EditData, Comment, Post } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
+import DeleteModal from "@/components/DeleteModal";
 
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -50,31 +50,6 @@ export default function Page({ params }: { params: { _id: string } }) {
     });
   };
 
-  const deleteCommentMutation = async (
-    // e: React.MouseEvent<HTMLButtonElement>,
-    id: string
-  ) => {
-    try {
-      await axios.delete(getBaseUrl() + `/api/comment/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const deleteMutation = useMutation(deleteCommentMutation, {
-    onSuccess: () => {
-      toast.success("Comment deleted");
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(["post"]);
-    },
-  });
-
   const mutation = useMutation(editMutation, {
     onSuccess: () => {
       toast.success("Post updated");
@@ -87,10 +62,6 @@ export default function Page({ params }: { params: { _id: string } }) {
       queryClient.invalidateQueries(["post"]);
     },
   });
-
-  const onDelete = (commentId: string) => {
-    deleteMutation.mutate(commentId);
-  };
 
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as EditData);
@@ -172,7 +143,7 @@ export default function Page({ params }: { params: { _id: string } }) {
               >
                 {!editing ? "Edit" : "Cancel"}
               </Button>
-              <DeleteModal id={params._id} />
+              <DeleteModal type="post" id={params._id} />
             </div>
           )}
         </div>
@@ -192,14 +163,7 @@ export default function Page({ params }: { params: { _id: string } }) {
                 <Button variant="light" className="mt-2">
                   {!editing ? "Edit" : "Confirm"}
                 </Button>
-                <Button
-                  color="danger"
-                  variant="light"
-                  className="mt-2"
-                  onClick={() => onDelete(data?.id)}
-                >
-                  Delete
-                </Button>
+                <DeleteModal type="comment" id={data?.id} />
               </div>
             )}
             <p className="text-gray-500 text-sm my-6">

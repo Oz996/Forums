@@ -1,6 +1,5 @@
 "use client";
 import { getUser } from "@/app/api/api";
-import DeleteUserModal from "@/app/(main)/user/[id]/DeleteUserModal";
 import PostCard from "@/components/PostCard";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/hooks/useAuth";
@@ -25,6 +24,7 @@ import { toast } from "react-toastify";
 import { getBaseUrl } from "@/lib/utils/URL";
 import classnames from "classnames";
 import Guestbook from "./Guestbook";
+import DeleteModal from "@/components/DeleteModal";
 
 export default function User({ params }: { params: { id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -147,7 +147,7 @@ export default function User({ params }: { params: { id: string } }) {
                       >
                         Edit
                       </Button>
-                      <DeleteUserModal params={params} />
+                      <DeleteModal type={"user"} id={params.id} />
                     </>
                   )}
                 </div>

@@ -13,7 +13,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const DeleteModal = ({ id }: { id: string }) => {
+const DeletePostModal = ({ id }: { id: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
   const { token } = useAuth();
@@ -74,4 +74,4 @@ const DeleteModal = ({ id }: { id: string }) => {
   );
 };
 
-export default DeleteModal;
+export default DeletePostModal;
