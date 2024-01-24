@@ -10,7 +10,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { getBaseUrl } from "@/lib/utils/URL";
 import classNames from "classnames";
 
-const CommentForm = ({ params }: { params: { _id: string } }) => {
+interface props {
+  params: {
+    _id: string;
+  };
+  isLoading?: boolean;
+}
+
+const CommentForm = ({ params, isLoading }: props) => {
   const {
     register,
     handleSubmit,
@@ -28,7 +35,7 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
       userId,
     };
     const res = await axios.post(
-      getBaseUrl() + `/api/post/${params._id}`,
+      getBaseUrl() + `/api/comment/${params._id}`,
       postData,
       {
         headers: {
@@ -81,9 +88,9 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
 
         <div className="flex justify-end mt-5 items-center">
           <Button
-            disabled={commentIsEmpty}
+            disabled={commentIsEmpty || isLoading}
             type="submit"
-            color={commentIsEmpty ? "default" : "primary"}
+            color={commentIsEmpty || isLoading ? "default" : "primary"}
             className={classNames({
               "cursor-pointer py-6": true,
               "cursor-not-allowed": commentIsEmpty,

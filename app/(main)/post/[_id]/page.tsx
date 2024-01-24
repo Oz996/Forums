@@ -10,7 +10,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { EditData, PostData, Comment, Post } from "@/types";
+import { EditData, Comment, Post } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Page({ params }: { params: { _id: string } }) {
@@ -51,12 +51,29 @@ export default function Page({ params }: { params: { _id: string } }) {
   };
 
   const deleteCommentMutation = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    // e: React.MouseEvent<HTMLButtonElement>,
+    id: string
   ) => {
-    await axios.delete(getBaseUrl() + `/api/post/${params._id}/comments/${9}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+      await axios.delete(getBaseUrl() + `/api/comment/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const deleteMutation = useMutation(deleteCommentMutation, {
+    onSuccess: () => {
+      toast.success("Comment deleted");
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["post"]);
+    },
+  });
 
   const mutation = useMutation(editMutation, {
     onSuccess: () => {
@@ -70,6 +87,10 @@ export default function Page({ params }: { params: { _id: string } }) {
       queryClient.invalidateQueries(["post"]);
     },
   });
+
+  const onDelete = (commentId: string) => {
+    deleteMutation.mutate(commentId);
+  };
 
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as EditData);
@@ -166,7 +187,7 @@ export default function Page({ params }: { params: { _id: string } }) {
           </div>
           <div className="flex flex-col p-10 w-full">
             <p>{data?.body}</p>
-            {userEmail === post?.user?.email && (
+            {userEmail === data?.user?.email && (
               <div className="flex justify-end border-t mt-5">
                 <Button variant="light" className="mt-2">
                   {!editing ? "Edit" : "Confirm"}
@@ -175,7 +196,7 @@ export default function Page({ params }: { params: { _id: string } }) {
                   color="danger"
                   variant="light"
                   className="mt-2"
-                  onClick={deleteCommentMutation}
+                  onClick={() => onDelete(data?.id)}
                 >
                   Delete
                 </Button>
@@ -187,7 +208,7 @@ export default function Page({ params }: { params: { _id: string } }) {
           </div>
         </div>
       ))}
-      <CommentForm params={params} />
+      <CommentForm params={params} isLoading={isLoading} />
     </section>
   );
 }
