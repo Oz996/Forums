@@ -9,10 +9,8 @@ import { Comment } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { getBaseUrl } from "@/lib/utils/URL";
 import classNames from "classnames";
-import { useState } from "react";
 
 const CommentForm = ({ params }: { params: { _id: string } }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -64,7 +62,13 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
       <h2 className="font-semibold text-lg">Add Comment</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Textarea
-          {...register("body", { required: "Comment can not be empty" })}
+          {...register("body", {
+            required: "Comment can not be empty",
+            maxLength: {
+              value: 1000,
+              message: "Comment cannot be over 1000 characters",
+            },
+          })}
           type="text"
         />
         <ErrorMessage
@@ -75,8 +79,7 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
           )}
         ></ErrorMessage>
 
-        <div className="flex justify-between mt-5 items-center">
-          <p>Characters left</p>
+        <div className="flex justify-end mt-5 items-center">
           <Button
             disabled={commentIsEmpty}
             type="submit"
