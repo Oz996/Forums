@@ -8,12 +8,16 @@ import axios from "axios";
 import { Comment } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { getBaseUrl } from "@/lib/utils/URL";
+import classNames from "classnames";
+import { useState } from "react";
 
 const CommentForm = ({ params }: { params: { _id: string } }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -46,12 +50,15 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
     onError: (error) => {
       console.error(error);
     },
-    onSettled: () => {},
   });
 
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as Comment);
   };
+
+  const comment = watch("body");
+  const commentIsEmpty = comment?.trim() === "" || comment?.length === 0;
+
   return (
     <section className="p-10 md:rounded-xl border">
       <h2 className="font-semibold text-lg">Add Comment</h2>
@@ -70,7 +77,15 @@ const CommentForm = ({ params }: { params: { _id: string } }) => {
 
         <div className="flex justify-between mt-5 items-center">
           <p>Characters left</p>
-          <Button type="submit" color="primary" className="py-6">
+          <Button
+            disabled={commentIsEmpty}
+            type="submit"
+            color={commentIsEmpty ? "default" : "primary"}
+            className={classNames({
+              "cursor-pointer py-6": true,
+              "cursor-not-allowed": commentIsEmpty,
+            })}
+          >
             Post Comment
           </Button>
         </div>
