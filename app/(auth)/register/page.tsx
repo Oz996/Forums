@@ -17,7 +17,6 @@ import {
 } from "@/lib/utils/cardValidator";
 
 export default function Register() {
-  const [isLoading, setIsLoading] = useState(false);
   const [membership, setMembership] = useState(false);
   const { isAuthenticated, premium, setPremium } = useAuth();
 
@@ -46,28 +45,25 @@ export default function Register() {
   } = useForm();
 
   const registerMutation = async (data: RegisterUser) => {
-    setIsLoading(true);
     const postdata = membership ? { ...data, isPremium: true } : data;
     const res = await axios.post(getBaseUrl() + "/api/register", postdata);
     return res.data;
   };
 
-  const mutation = useMutation(registerMutation, {
+  const { mutate, isLoading } = useMutation(registerMutation, {
     onSuccess: () => {
-      setIsLoading(false);
       setPremium(false);
       localStorage.removeItem("premium");
       router.push("/login");
       toast.success("Signed up");
     },
     onError: (error) => {
-      setIsLoading(false);
       console.error(error);
     },
   });
 
   const onSubmit = (data: FieldValues) => {
-    mutation.mutate(data as RegisterUser);
+    mutate(data as RegisterUser);
   };
 
   const validiatePassword = (value: string) => {

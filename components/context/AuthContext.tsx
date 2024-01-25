@@ -43,6 +43,7 @@ export const AuthContextProvider = ({
   const [premium, setPremium] = useState(false);
 
   console.log("premium", premium);
+  console.log("email", userEmail);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

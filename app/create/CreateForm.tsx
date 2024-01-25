@@ -11,7 +11,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 const CreateForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { token, isAuthenticated, userId } = useAuth();
 
@@ -30,8 +29,6 @@ const CreateForm = () => {
   const newPostMutation = async (data: Post) => {
     if (!isAuthenticated) return router.push("/login");
 
-    setIsLoading(true);
-
     const postData = {
       ...data,
       userId,
@@ -44,20 +41,17 @@ const CreateForm = () => {
     return res.data;
   };
 
-  const mutation = useMutation(newPostMutation, {
+  const { mutate, isLoading } = useMutation(newPostMutation, {
     onSuccess: (data) => {
       router.push("/home");
     },
     onError: (error) => {
       console.error(error);
     },
-    onSettled: () => {
-      setIsLoading(false);
-    },
   });
 
   const onSubmit = async (data: FieldValues) => {
-    mutation.mutate(data as Post);
+    mutate(data as Post);
   };
 
   return (

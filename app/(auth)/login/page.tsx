@@ -13,7 +13,6 @@ import { User } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
   const { handleLogin, isAuthenticated } = useAuth();
   const router = useRouter();
 
@@ -31,15 +30,13 @@ export default function Login() {
   } = useForm();
 
   const loginMutation = async (data: User) => {
-    setIsLoading(true);
     const res = await axios.post(getBaseUrl() + "/api/login", data);
     return res.data;
   };
 
-  const mutation = useMutation(loginMutation, {
+  const { mutate, isLoading } = useMutation(loginMutation, {
     onSuccess: (data) => {
       router.push("/home");
-      setIsLoading(false);
       const token = data.token;
       const email = getValues("email");
       const userId = data.userId;
@@ -49,13 +46,12 @@ export default function Login() {
       console.log("data", data);
     },
     onError: (error) => {
-      setIsLoading(false);
       console.error(error);
     },
   });
 
   const onSubmit = (data: FieldValues) => {
-    mutation.mutate(data as User);
+    mutate(data as User);
   };
 
   return (
