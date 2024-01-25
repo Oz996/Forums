@@ -25,15 +25,13 @@ type options = "user" | "post" | "comment";
 
 const DeleteModal = ({ type, id }: props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { handleLogout, token } = useAuth();
+  const { handleLogout } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const deleteUser = async (id: string) => {
     try {
-      const res = await axios.delete(getBaseUrl() + `/api/user/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.delete(getBaseUrl() + `/api/user/${id}`);
       if (res.status === 200) {
         router.push("/");
         toast.success("User deleted");
@@ -46,11 +44,7 @@ const DeleteModal = ({ type, id }: props) => {
 
   const deletePost = async (id: string) => {
     try {
-      const res = await axios.delete(getBaseUrl() + `/api/post/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.delete(getBaseUrl() + `/api/post/${id}`);
       if (res.status === 200) {
         router.push("/");
         toast.success("Post deleted");
@@ -62,9 +56,7 @@ const DeleteModal = ({ type, id }: props) => {
 
   const deleteComment = async (id: string) => {
     try {
-      const res = await axios.delete(getBaseUrl() + `/api/comment/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.delete(getBaseUrl() + `/api/comment/${id}`);
       if (res.status === 200) {
         toast.success("Comment deleted");
         queryClient.invalidateQueries(["post"]);

@@ -16,7 +16,7 @@ import DeleteModal from "@/components/DeleteModal";
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
   const queryClient = useQueryClient();
-  const { userEmail, userId } = useAuth();
+  const { userId } = useAuth();
   const { data, isLoading } = useQuery({
     queryKey: ["post"],
     queryFn: () => getPost(params._id),
@@ -28,8 +28,6 @@ export default function Page({ params }: { params: { _id: string } }) {
 
   const edited = post?.createdAt !== post?.editedAt;
   console.log(data);
-
-  const { token } = useAuth();
 
   const {
     register,
@@ -45,9 +43,7 @@ export default function Page({ params }: { params: { _id: string } }) {
   };
 
   const editMutation = async (data: EditData) => {
-    await axios.put(getBaseUrl() + `/api/post/${params._id}`, data, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axios.put(getBaseUrl() + `/api/post/${params._id}`, data);
   };
 
   const mutation = useMutation(editMutation, {
@@ -66,6 +62,8 @@ export default function Page({ params }: { params: { _id: string } }) {
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as EditData);
   };
+
+  console.log("post", post);
 
   return (
     <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
@@ -134,7 +132,7 @@ export default function Page({ params }: { params: { _id: string } }) {
               </form>
             )}
           </div>
-          {userEmail === post?.user?.email && (
+          {userId === post?.user?.id && (
             <div className="flex justify-end border-t mt-5">
               <Button
                 variant="light"
@@ -158,7 +156,7 @@ export default function Page({ params }: { params: { _id: string } }) {
           </div>
           <div className="flex flex-col p-10 w-full">
             <p>{data?.body}</p>
-            {userEmail === data?.user?.email && (
+            {userId === data?.user?.id && (
               <div className="flex justify-end border-t mt-5">
                 <Button variant="light" className="mt-2">
                   {!editing ? "Edit" : "Confirm"}

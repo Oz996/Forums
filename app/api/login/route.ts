@@ -32,14 +32,27 @@ export async function POST(req: NextRequest) {
     }
 
     const secretKey = process.env.SECRET_KEY;
+    const isPremium = user.premium ? true : false;
 
-    const token = jwt.sign({ userId: user?.id }, secretKey!, {
+    const tokenData = {
+      userId: user.id,
+      premium: isPremium,
+    };
+
+    const token = jwt.sign(tokenData, secretKey!, {
       expiresIn: "1h",
     });
 
-    const isPremium = user.premium ? true : false;
+    // return NextResponse.json({ token, userId: user.id, premium: isPremium });
 
-    return NextResponse.json({ token, userId: user.id, premium: isPremium });
+    const res = NextResponse.json({
+      success: true,
+      userId: user.id,
+      premium: isPremium,
+      userEmail: email,
+    });
+    res.cookies.set("token", token, { httpOnly: true, secure: true });
+    return res;
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to authenticate user", error },

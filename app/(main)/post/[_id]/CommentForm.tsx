@@ -1,5 +1,5 @@
 "use client";
-import { Button, Textarea } from "@nextui-org/react";
+import { Button, Spinner, Textarea } from "@nextui-org/react";
 import { FieldValues, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -36,17 +36,12 @@ const CommentForm = ({ params, isLoading }: props) => {
     };
     const res = await axios.post(
       getBaseUrl() + `/api/comment/${params._id}`,
-      postData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      postData
     );
     return res.data;
   };
 
-  const mutation = useMutation(commentMutation, {
+  const { mutate, isLoading: formLoading } = useMutation(commentMutation, {
     onSuccess: () => {
       toast.success("Comment posted");
       queryClient.invalidateQueries(["post"]);
@@ -58,11 +53,13 @@ const CommentForm = ({ params, isLoading }: props) => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    mutation.mutate(data as Comment);
+    mutate(data as Comment);
   };
 
   const comment = watch("body");
   const commentIsEmpty = comment?.trim() === "" || comment?.length === 0;
+
+  const disabled = commentIsEmpty || isLoading || formLoading;
 
   return (
     <section className="p-10 md:rounded-xl border">
@@ -88,14 +85,15 @@ const CommentForm = ({ params, isLoading }: props) => {
 
         <div className="flex justify-end mt-5 items-center">
           <Button
-            disabled={commentIsEmpty || isLoading}
+            disabled={disabled}
             type="submit"
-            color={commentIsEmpty || isLoading ? "default" : "primary"}
+            color={disabled ? "default" : "primary"}
             className={classNames({
               "cursor-pointer py-6": true,
-              "cursor-not-allowed": commentIsEmpty,
+              "cursor-not-allowed": disabled,
             })}
           >
+            {formLoading && <Spinner size="sm" color="primary" />}
             Post Comment
           </Button>
         </div>

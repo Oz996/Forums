@@ -26,7 +26,6 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm();
 
   const loginMutation = async (data: User) => {
@@ -36,9 +35,10 @@ export default function Login() {
 
   const { mutate, isLoading } = useMutation(loginMutation, {
     onSuccess: (data) => {
+      console.log("data", data);
       router.push("/home");
       const token = data.token;
-      const email = getValues("email");
+      const email = data.userEmail;
       const userId = data.userId;
       const premium = data.premium;
       handleLogin(email, token, userId, premium);

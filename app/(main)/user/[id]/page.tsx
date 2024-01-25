@@ -32,7 +32,7 @@ export default function User({ params }: { params: { id: string } }) {
     queryKey: ["user"],
     queryFn: () => getUser(params.id),
   });
-  const { userEmail, token } = useAuth();
+  const { userEmail } = useAuth();
   const queryClient = useQueryClient();
   const {
     register,
@@ -48,9 +48,7 @@ export default function User({ params }: { params: { id: string } }) {
   };
 
   const userMutation = async (data: UserData) => {
-    const res = await axios.put(getBaseUrl() + `/api/user/${params.id}`, data, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.put(getBaseUrl() + `/api/user/${params.id}`, data);
     console.log(res);
   };
 

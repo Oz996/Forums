@@ -12,7 +12,7 @@ import { getBaseUrl } from "@/lib/utils/URL";
 
 const CreateForm = () => {
   const router = useRouter();
-  const { token, isAuthenticated, userId } = useAuth();
+  const { isAuthenticated, userId } = useAuth();
 
   const categories: Categories[] = [
     { id: 0, value: "red", name: "Red" },
@@ -33,11 +33,7 @@ const CreateForm = () => {
       ...data,
       userId,
     };
-    const res = await axios.post(getBaseUrl() + "/api/posts/", postData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.post(getBaseUrl() + "/api/posts/", postData);
     return res.data;
   };
 
