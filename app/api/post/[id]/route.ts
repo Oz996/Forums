@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Post } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { isAuthenticated } from "../../isAuthenticated";
 
 export async function GET(
   req: NextRequest,
@@ -39,19 +40,26 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const Body = await req.json();
-    const { body, title } = Body;
-    const updatedPost = await prisma.post.update({
-      where: {
-        id: params.id,
-      },
-      data: {
-        title,
-        body,
-        editedAt: new Date(),
-      },
-    });
-    return NextResponse.json(updatedPost, { status: 200 });
+    if (isAuthenticated(req)) {
+      const Body = await req.json();
+      const { body, title } = Body;
+      const updatedPost = await prisma.post.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          title,
+          body,
+          editedAt: new Date(),
+        },
+      });
+      return NextResponse.json(updatedPost, { status: 200 });
+    } else {
+      return NextResponse.json(
+        { message: "Authentication failed" },
+        { status: 401 }
+      );
+    }
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -66,18 +74,25 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const postComments = await prisma.comment.deleteMany({
-      where: {
-        postId: params.id,
-      },
-    });
+    if (isAuthenticated(req)) {
+      const postComments = await prisma.comment.deleteMany({
+        where: {
+          postId: params.id,
+        },
+      });
 
-    const deletePost = await prisma.post.delete({
-      where: {
-        id: params.id,
-      },
-    });
-    return NextResponse.json({ message: "Post deleted" }, { status: 200 });
+      const deletePost = await prisma.post.delete({
+        where: {
+          id: params.id,
+        },
+      });
+      return NextResponse.json({ message: "Post deleted" }, { status: 200 });
+    } else {
+      return NextResponse.json(
+        { message: "Authentication failed" },
+        { status: 401 }
+      );
+    }
   } catch (error) {
     console.error(error);
     return NextResponse.json(

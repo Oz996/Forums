@@ -37,11 +37,10 @@ export default function Login() {
     onSuccess: (data) => {
       console.log("data", data);
       router.push("/");
-      const token = data.token;
       const email = data.userEmail;
       const userId = data.userId;
       const premium = data.premium;
-      handleLogin(email, token, userId, premium);
+      handleLogin(email, userId, premium);
       toast.success("Signed in");
       console.log("data", data);
     },

@@ -8,23 +8,16 @@ import { useCookies } from "react-cookie";
 interface AuthContextType {
   isAuthenticated: boolean;
   userEmail: string | null;
-  token: string | null;
   userId: string | null;
   premium: boolean;
   setPremium: (value: boolean) => void;
-  handleLogin: (
-    email: string,
-    token: string,
-    userId: string,
-    premium: boolean
-  ) => void;
+  handleLogin: (email: string, userId: string, premium: boolean) => void;
   handleLogout: () => void;
 }
 
 const initialState: AuthContextType = {
   isAuthenticated: false,
   userEmail: null,
-  token: null,
   userId: null,
   premium: false,
   setPremium: (value: boolean) => {},
@@ -42,7 +35,6 @@ export const AuthContextProvider = ({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [premium, setPremium] = useState(false);
   const [cookies, removeCookie] = useCookies(["authenticated"]);
 
@@ -61,7 +53,6 @@ export const AuthContextProvider = ({
     }
     console.log("222", isAuthenticatedCookie);
 
-    setToken(token);
     setUserId(userId);
     setUserEmail(email);
   }, [isAuthenticated, cookies]);
@@ -78,18 +69,11 @@ export const AuthContextProvider = ({
     setPremium(userPremium);
   }, []);
 
-  const handleLogin = (
-    email: string,
-    token: string,
-    userId: string,
-    premium: boolean
-  ) => {
+  const handleLogin = (email: string, userId: string, premium: boolean) => {
     setIsAuthenticated(true);
-    localStorage.setItem("token", token);
     localStorage.setItem("email", email);
     localStorage.setItem("userId", userId);
     console.log("id", userId);
-    setToken(token);
     setUserId(userId);
     setUserEmail(email);
 
@@ -106,7 +90,6 @@ export const AuthContextProvider = ({
     setPremium(false);
     setIsAuthenticated(false);
     setUserEmail(null);
-    setToken(null);
     localStorage.clear();
     axios.post(getBaseUrl() + "/api/logout");
   };
@@ -121,7 +104,6 @@ export const AuthContextProvider = ({
         userId,
         handleLogin,
         handleLogout,
-        token,
       }}
     >
       {children}
