@@ -1,7 +1,7 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
-import { getPost } from "../../../api/api";
+import { getPost } from "../../../api/services/api";
 import CommentForm from "@/app/(main)/post/[_id]/CommentForm";
 import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";

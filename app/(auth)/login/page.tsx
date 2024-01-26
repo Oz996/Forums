@@ -16,11 +16,11 @@ export default function Login() {
   const { handleLogin, isAuthenticated } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/home");
-    }
-  }, [isAuthenticated, router]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     router.push("/");
+  //   }
+  // }, [isAuthenticated, router]);
 
   const {
     register,
@@ -36,7 +36,7 @@ export default function Login() {
   const { mutate, isLoading } = useMutation(loginMutation, {
     onSuccess: (data) => {
       console.log("data", data);
-      router.push("/home");
+      router.push("/");
       const token = data.token;
       const email = data.userEmail;
       const userId = data.userId;
@@ -93,7 +93,7 @@ export default function Login() {
       </form>
       <p className="text-sm text-center">
         Not a member yet?{" "}
-        <Link className="underline text-blue-600" href="/register">
+        <Link className="underline text-blue-600" href="/plan">
           Sign up
         </Link>{" "}
         here

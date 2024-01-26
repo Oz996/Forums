@@ -1,6 +1,9 @@
 "use client";
+import { getBaseUrl } from "@/lib/utils/URL";
+import axios from "axios";
 import { ReactElement, useEffect, useState } from "react";
 import { createContext } from "react";
+import { useCookies } from "react-cookie";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -41,19 +44,27 @@ export const AuthContextProvider = ({
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [premium, setPremium] = useState(false);
+  const [cookies, removeCookie] = useCookies(["authenticated"]);
+
+  console.log("cookies", cookies);
 
   console.log("premium", premium);
   console.log("email", userEmail);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
     const userId = localStorage.getItem("userId");
-    setIsAuthenticated(!!token || false);
+    const isAuthenticatedCookie = cookies.authenticated === true;
+    if (isAuthenticatedCookie) {
+      setIsAuthenticated(true);
+    }
+    console.log("222", isAuthenticatedCookie);
+
     setToken(token);
     setUserId(userId);
     setUserEmail(email);
-  }, [isAuthenticated]);
+  }, [isAuthenticated, cookies]);
 
   useEffect(() => {
     if (premium) {
@@ -97,8 +108,9 @@ export const AuthContextProvider = ({
     setUserEmail(null);
     setToken(null);
     localStorage.clear();
+    axios.post(getBaseUrl() + "/api/logout");
   };
-
+  console.log("isAuthenticated in AuthContextProvider:", isAuthenticated);
   return (
     <AuthContext.Provider
       value={{

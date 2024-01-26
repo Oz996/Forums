@@ -10,8 +10,7 @@ export const metadata: Metadata = {
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Header />
-      <main className="pt-24">{children}</main>
+      <main>{children}</main>
     </>
   );
 }

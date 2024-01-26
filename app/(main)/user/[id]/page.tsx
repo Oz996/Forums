@@ -1,5 +1,5 @@
 "use client";
-import { getUser } from "@/app/api/api";
+import { getUser } from "@/app/api/services/api";
 import PostCard from "@/components/PostCard";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/hooks/useAuth";

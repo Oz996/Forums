@@ -7,13 +7,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import UserMenu from "./UserMenu";
+import { usePathname } from "next/navigation";
+import classNames from "classnames";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const { isAuthenticated, premium } = useAuth();
   const { theme, setTheme } = useTheme();
 
-  console.log(theme);
+  console.log("isAuthenticated in Header:", isAuthenticated);
+  const pathName = usePathname();
+  console.log(pathName);
+
+  const hiddenRoutes = ["/plan", "/login", "/register"];
 
   useEffect(() => {
     setMounted(true);
@@ -24,13 +30,21 @@ const Header = () => {
       <Navbar className="w-full h-[3rem] bg-primary-600 absolute top-0 left-0 items-center text-white duration-200"></Navbar>
     );
 
+  console.log(theme);
   return (
     <>
-      <Navbar className="w-full h-[3rem] bg-primary-600 absolute top-0 left-0 items-center text-white duration-200">
+      <Navbar
+        className={classNames({
+          "w-full h-[3rem] bg-primary-600 absolute top-0 left-0 items-center text-white duration-200":
+            true,
+          hidden: hiddenRoutes.includes(pathName),
+        })}
+      >
         <NavbarBrand>
           <Link
             className="uppercase text-3xl font-semibold"
-            href={isAuthenticated ? "/home" : "/"}
+            // href={isAuthenticated ? "/" : "/login"}
+            href={"/"}
           >
             posts
           </Link>

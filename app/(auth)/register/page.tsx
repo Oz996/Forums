@@ -21,11 +21,12 @@ export default function Register() {
   const { isAuthenticated, premium, setPremium } = useAuth();
 
   const router = useRouter();
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/home");
-    }
-  }, [isAuthenticated, router]);
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     router.push("/");
+  //   }
+  // }, [isAuthenticated, router]);
 
   useEffect(() => {
     if (premium) {

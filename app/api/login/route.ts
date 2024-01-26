@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
       userEmail: email,
     });
     res.cookies.set("token", token, { httpOnly: true, secure: true });
+    res.cookies.set("authenticated", "true", { secure: true });
     return res;
   } catch (error) {
     return NextResponse.json(

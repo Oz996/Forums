@@ -34,7 +34,7 @@ export default function Upgrade() {
       });
       if (res.status === 200) {
         setPremium(true);
-        router.push("/home");
+        router.push("/");
         toast.success("Upgraded to Premium!");
       }
     } catch (error) {
