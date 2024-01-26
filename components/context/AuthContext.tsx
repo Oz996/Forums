@@ -1,6 +1,4 @@
 "use client";
-import { getBaseUrl } from "@/lib/utils/URL";
-import axios from "axios";
 import { ReactElement, useEffect, useState } from "react";
 import { createContext } from "react";
 import { useCookies } from "react-cookie";
@@ -36,7 +34,7 @@ export const AuthContextProvider = ({
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [premium, setPremium] = useState(false);
-  const [cookies, removeCookie] = useCookies(["authenticated"]);
+  const [cookies] = useCookies(["authenticated"]);
 
   console.log("cookies", cookies);
 
@@ -50,6 +48,8 @@ export const AuthContextProvider = ({
     const isAuthenticatedCookie = cookies.authenticated === true;
     if (isAuthenticatedCookie) {
       setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
     }
     console.log("222", isAuthenticatedCookie);
 
@@ -91,9 +91,8 @@ export const AuthContextProvider = ({
     setIsAuthenticated(false);
     setUserEmail(null);
     localStorage.clear();
-    axios.post(getBaseUrl() + "/api/logout");
   };
-  console.log("isAuthenticated in AuthContextProvider:", isAuthenticated);
+
   return (
     <AuthContext.Provider
       value={{

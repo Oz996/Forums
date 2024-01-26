@@ -7,11 +7,9 @@ export function isAuthenticated(req: any) {
   try {
     if (tokenObject) {
       const token = tokenObject.value;
-      console.log("token found", token);
-      console.log("key", secretKey);
       const decoded = jwt.verify(token, secretKey!);
+
       if (decoded) {
-        console.log("decoded");
         return true;
       }
     }

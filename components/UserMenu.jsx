@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import { getBaseUrl } from "@/lib/utils/URL";
 import {
   Button,
   Dropdown,
@@ -7,6 +8,7 @@ import {
   DropdownSection,
   DropdownTrigger,
 } from "@nextui-org/react";
+import axios from "axios";
 import Link from "next/link";
 import { FaPlus, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -14,9 +16,14 @@ import { toast } from "react-toastify";
 const UserMenu = () => {
   const { userEmail, userId, handleLogout, premium } = useAuth();
 
-  const handleLogoutClick = () => {
-    handleLogout();
-    toast.success("Signed out");
+  const handleLogoutClick = async () => {
+    try {
+      await axios.post(getBaseUrl() + "/api/logout");
+      handleLogout();
+      toast.success("Signed out");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

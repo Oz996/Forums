@@ -13,7 +13,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
-import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
 interface props {
@@ -33,9 +32,10 @@ const DeleteModal = ({ type, id }: props) => {
     try {
       const res = await axios.delete(getBaseUrl() + `/api/user/${id}`);
       if (res.status === 200) {
+        await axios.post(getBaseUrl() + "/api/logout");
+        handleLogout();
         router.push("/");
         toast.success("User deleted");
-        handleLogout();
       }
     } catch (error) {
       console.error(error);

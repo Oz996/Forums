@@ -15,7 +15,6 @@ const Header = () => {
   const { isAuthenticated, premium } = useAuth();
   const { theme, setTheme } = useTheme();
 
-  console.log("isAuthenticated in Header:", isAuthenticated);
   const pathName = usePathname();
   console.log(pathName);
 
