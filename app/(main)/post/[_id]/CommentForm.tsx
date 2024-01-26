@@ -27,7 +27,7 @@ const CommentForm = ({ params, isLoading }: props) => {
   } = useForm();
 
   const queryClient = useQueryClient();
-  const { token, userId } = useAuth();
+  const { userId } = useAuth();
 
   const commentMutation = async (data: Comment) => {
     const postData = {

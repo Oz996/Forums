@@ -42,7 +42,6 @@ export const AuthContextProvider = ({
   console.log("email", userEmail);
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
     const userId = localStorage.getItem("userId");
     const isAuthenticatedCookie = cookies.authenticated === true;
