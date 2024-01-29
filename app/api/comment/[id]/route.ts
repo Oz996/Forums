@@ -39,6 +39,39 @@ export async function POST(
   }
 }
 
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const Body = await req.json();
+    const { comment } = Body;
+    if (isAuthenticated(req)) {
+      const updatedComment = await prisma.comment.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          body: comment,
+          editedAt: new Date(),
+        },
+      });
+      return NextResponse.json(updatedComment, { status: 200 });
+    } else {
+      return NextResponse.json(
+        { message: "Authentication failed" },
+        { status: 401 }
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Failed to edit comment", error },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }

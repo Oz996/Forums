@@ -6,15 +6,18 @@ import CommentForm from "@/app/(main)/post/[_id]/CommentForm";
 import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { FieldValues, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { EditData, Comment, Post } from "@/types";
+import { PostForm, Comment, Post, ICommentForm } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 import DeleteModal from "@/components/DeleteModal";
+import { ErrorMessage } from "@hookform/error-message";
 
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
+  const [editingComment, setEditingComment] = useState(false);
+  const [commentId, setCommentId] = useState("");
   const queryClient = useQueryClient();
   const { userId } = useAuth();
   const { data, isLoading } = useQuery({
@@ -26,27 +29,40 @@ export default function Page({ params }: { params: { _id: string } }) {
   const date = post?.createdAt?.slice(0, 10);
   const updated = post?.editedAt?.slice(0, 10);
 
-  const edited = post?.createdAt !== post?.editedAt;
+  const editedPost = post?.createdAt !== post?.editedAt;
   console.log(data);
 
+  const commentsList = post?.comments;
+
+  console.log(commentsList);
+
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
+    register: postRegister,
+    handleSubmit: postHandleSubmit,
+    formState: { errors: postErrors },
+    setValue: setPostValue,
   } = useForm();
 
-  const handleEditClick = () => {
-    setValue("title", post?.title || "");
-    setValue("body", post?.body || "");
+  const {
+    register: commentRegister,
+    handleSubmit: commentHandleSubmit,
+    formState: { errors: commentErrors },
+    setValue: setCommentValue,
+  } = useForm();
+
+  // Post logic
+
+  const handleEditPost = () => {
+    setPostValue("title", post?.title || "");
+    setPostValue("body", post?.body || "");
     setEditing((prev) => !prev);
   };
 
-  const editMutation = async (data: EditData) => {
-    await axios.put(getBaseUrl() + `/api/post/${params._id}`, data);
+  const editPostMutation = async (postData: PostForm) => {
+    await axios.put(getBaseUrl() + `/api/post/${params._id}`, postData);
   };
 
-  const mutation = useMutation(editMutation, {
+  const postMutation = useMutation(editPostMutation, {
     onSuccess: () => {
       toast.success("Post updated");
     },
@@ -59,8 +75,44 @@ export default function Page({ params }: { params: { _id: string } }) {
     },
   });
 
-  const onSubmit = (data: FieldValues) => {
-    mutation.mutate(data as EditData);
+  const onPostSubmit = (postData: FieldValues) => {
+    postMutation.mutate(postData as PostForm);
+  };
+
+  console.log("id", commentId);
+
+  // Comment logic
+
+  const handleEditComment = (id: string) => {
+    const comment = post?.comments.find((comment) => comment.id === id);
+    console.log("comment", comment);
+    setCommentValue("comment", comment?.body);
+    console.log("body", comment?.body);
+    if (comment) {
+      setCommentId(comment?.id);
+    }
+    setEditingComment((prev) => !prev);
+  };
+
+  const editCommentMutation = async (commentData: ICommentForm) => {
+    await axios.put(getBaseUrl() + `/api/comment/${commentId}`, commentData);
+  };
+
+  const commentMutation = useMutation(editCommentMutation, {
+    onSuccess: () => {
+      toast.success("Comment updated");
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+    onSettled: () => {
+      setEditingComment(false);
+      queryClient.invalidateQueries(["post"]);
+    },
+  });
+
+  const onCommentSubmit = (data: FieldValues) => {
+    commentMutation.mutate(data as ICommentForm);
   };
 
   console.log("post", post);
@@ -93,7 +145,7 @@ export default function Page({ params }: { params: { _id: string } }) {
                       <p className="text-gray-500 text-sm">Created at {date}</p>
                     )}
 
-                    {edited && (
+                    {editedPost && (
                       <p className="text-gray-500 text-sm italic pr-2">
                         Edited at {updated}
                       </p>
@@ -112,20 +164,41 @@ export default function Page({ params }: { params: { _id: string } }) {
                 </Skeleton>
               </div>
             ) : (
-              <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+              <form
+                className="w-full"
+                onSubmit={postHandleSubmit(onPostSubmit)}
+              >
                 <Input
-                  {...register("title")}
+                  {...postRegister("title", { required: "Title is required" })}
                   label="Title"
                   variant="underlined"
                   className="mb-5"
                   defaultValue=" "
                 />
+                <ErrorMessage
+                  name="title"
+                  errors={postErrors}
+                  render={({ message }) => (
+                    <p className="text-red-500 text-sm font-semibold">
+                      {message}
+                    </p>
+                  )}
+                ></ErrorMessage>
                 <Textarea
-                  {...register("body")}
+                  {...postRegister("body", { required: "Body is required" })}
                   label="Description"
                   variant="underlined"
                   className="w-full"
                 />
+                <ErrorMessage
+                  name="body"
+                  errors={postErrors}
+                  render={({ message }) => (
+                    <p className="text-red-500 text-sm font-semibold">
+                      {message}
+                    </p>
+                  )}
+                ></ErrorMessage>
                 <Button variant="ghost" type="submit">
                   Confirm
                 </Button>
@@ -134,11 +207,7 @@ export default function Page({ params }: { params: { _id: string } }) {
           </div>
           {userId === post?.user?.id && (
             <div className="flex justify-end border-t mt-5">
-              <Button
-                variant="light"
-                className="mt-2"
-                onClick={handleEditClick}
-              >
+              <Button variant="light" className="mt-2" onClick={handleEditPost}>
                 {!editing ? "Edit" : "Cancel"}
               </Button>
               <DeleteModal type="post" id={params._id} />
@@ -146,6 +215,8 @@ export default function Page({ params }: { params: { _id: string } }) {
           )}
         </div>
       </div>
+
+      {/* Comments */}
       {post?.comments?.map((data: Comment) => (
         <div
           key={data.id}
@@ -155,18 +226,57 @@ export default function Page({ params }: { params: { _id: string } }) {
             <UserCard data={data} />
           </div>
           <div className="flex flex-col p-10 w-full">
-            <p>{data?.body}</p>
+            {editingComment && commentId === data.id ? (
+              <form onSubmit={commentHandleSubmit(onCommentSubmit)}>
+                <Textarea
+                  {...commentRegister("comment", {
+                    required: "Comment can not be empty",
+                    maxLength: {
+                      value: 1000,
+                      message: "Comment cannot be over 1000 characters",
+                    },
+                  })}
+                  type="text"
+                />
+                <ErrorMessage
+                  name="comment"
+                  errors={commentErrors}
+                  render={({ message }) => (
+                    <p className="text-red-500 text-sm font-semibold">
+                      {message}
+                    </p>
+                  )}
+                ></ErrorMessage>
+                <Button variant="ghost" type="submit">
+                  Confirm
+                </Button>
+              </form>
+            ) : (
+              <p>{data?.body}</p>
+            )}
             {userId === data?.user?.id && (
               <div className="flex justify-end border-t mt-5">
-                <Button variant="light" className="mt-2">
-                  {!editing ? "Edit" : "Confirm"}
+                <Button
+                  onClick={() => handleEditComment(data?.id)}
+                  variant="light"
+                  className="mt-2"
+                  type="submit"
+                >
+                  {!editingComment ? "Edit" : "Cancel"}
                 </Button>
                 <DeleteModal type="comment" id={data?.id} />
               </div>
             )}
-            <p className="text-gray-500 text-sm my-6">
-              Created at {data?.createdAt.slice(0, 10)}
-            </p>
+            <div className="flex my-6 items-center gap-3">
+              <p className="text-gray-500 text-sm ">
+                Created at {data?.createdAt.slice(0, 10)}
+              </p>
+              {data?.createdAt !== data?.editedAt && (
+                <p className="text-gray-500 text-sm italic pr-2">
+                  Edited at {data?.editedAt.slice(0, 10)}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       ))}

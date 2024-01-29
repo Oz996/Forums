@@ -54,8 +54,16 @@ export interface UserData {
   email: string;
 }
 
-export interface EditData {
+export interface PostForm {
   title: string;
+  body: string;
+}
+
+export interface ICommentForm {
+  body: string
+}
+
+export interface EditComment {
   body: string;
 }
 
