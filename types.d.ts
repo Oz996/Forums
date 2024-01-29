@@ -60,10 +60,6 @@ export interface PostForm {
 }
 
 export interface ICommentForm {
-  body: string
-}
-
-export interface EditComment {
   body: string;
 }
 

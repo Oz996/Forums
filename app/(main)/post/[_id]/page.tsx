@@ -13,11 +13,11 @@ import { PostForm, Comment, Post, ICommentForm } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 import DeleteModal from "@/components/DeleteModal";
 import { ErrorMessage } from "@hookform/error-message";
+import Comments from "./Comments";
+import { formatDate } from "@/lib/utils/formatDate";
 
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
-  const [editingComment, setEditingComment] = useState(false);
-  const [commentId, setCommentId] = useState("");
   const queryClient = useQueryClient();
   const { userId } = useAuth();
   const { data, isLoading } = useQuery({
@@ -26,35 +26,19 @@ export default function Page({ params }: { params: { _id: string } }) {
   });
 
   const post: Post = data;
-  const date = post?.createdAt?.slice(0, 10);
-  const updated = post?.editedAt?.slice(0, 10);
 
   const editedPost = post?.createdAt !== post?.editedAt;
-  console.log(data);
-
-  const commentsList = post?.comments;
-
-  console.log(commentsList);
 
   const {
-    register: postRegister,
-    handleSubmit: postHandleSubmit,
-    formState: { errors: postErrors },
-    setValue: setPostValue,
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
   } = useForm();
-
-  const {
-    register: commentRegister,
-    handleSubmit: commentHandleSubmit,
-    formState: { errors: commentErrors },
-    setValue: setCommentValue,
-  } = useForm();
-
-  // Post logic
 
   const handleEditPost = () => {
-    setPostValue("title", post?.title || "");
-    setPostValue("body", post?.body || "");
+    setValue("title", post?.title || "");
+    setValue("body", post?.body || "");
     setEditing((prev) => !prev);
   };
 
@@ -77,42 +61,6 @@ export default function Page({ params }: { params: { _id: string } }) {
 
   const onPostSubmit = (postData: FieldValues) => {
     postMutation.mutate(postData as PostForm);
-  };
-
-  console.log("id", commentId);
-
-  // Comment logic
-
-  const handleEditComment = (id: string) => {
-    const comment = post?.comments.find((comment) => comment.id === id);
-    console.log("comment", comment);
-    setCommentValue("comment", comment?.body);
-    console.log("body", comment?.body);
-    if (comment) {
-      setCommentId(comment?.id);
-    }
-    setEditingComment((prev) => !prev);
-  };
-
-  const editCommentMutation = async (commentData: ICommentForm) => {
-    await axios.put(getBaseUrl() + `/api/comment/${commentId}`, commentData);
-  };
-
-  const commentMutation = useMutation(editCommentMutation, {
-    onSuccess: () => {
-      toast.success("Comment updated");
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-    onSettled: () => {
-      setEditingComment(false);
-      queryClient.invalidateQueries(["post"]);
-    },
-  });
-
-  const onCommentSubmit = (data: FieldValues) => {
-    commentMutation.mutate(data as ICommentForm);
   };
 
   console.log("post", post);
@@ -142,12 +90,14 @@ export default function Page({ params }: { params: { _id: string } }) {
                 {!editing && (
                   <div className="flex my-6 items-center gap-3">
                     {!isLoading && (
-                      <p className="text-gray-500 text-sm">Created at {date}</p>
+                      <p className="text-gray-500 text-sm">
+                        Created at {formatDate(data?.createdAt)}
+                      </p>
                     )}
 
                     {editedPost && (
                       <p className="text-gray-500 text-sm italic pr-2">
-                        Edited at {updated}
+                        Edited at {formatDate(data?.editedAt)}
                       </p>
                     )}
                   </div>
@@ -164,12 +114,9 @@ export default function Page({ params }: { params: { _id: string } }) {
                 </Skeleton>
               </div>
             ) : (
-              <form
-                className="w-full"
-                onSubmit={postHandleSubmit(onPostSubmit)}
-              >
+              <form className="w-full" onSubmit={handleSubmit(onPostSubmit)}>
                 <Input
-                  {...postRegister("title", { required: "Title is required" })}
+                  {...register("title", { required: "Title is required" })}
                   label="Title"
                   variant="underlined"
                   className="mb-5"
@@ -177,7 +124,7 @@ export default function Page({ params }: { params: { _id: string } }) {
                 />
                 <ErrorMessage
                   name="title"
-                  errors={postErrors}
+                  errors={errors}
                   render={({ message }) => (
                     <p className="text-red-500 text-sm font-semibold">
                       {message}
@@ -185,14 +132,14 @@ export default function Page({ params }: { params: { _id: string } }) {
                   )}
                 ></ErrorMessage>
                 <Textarea
-                  {...postRegister("body", { required: "Body is required" })}
+                  {...register("body", { required: "Body is required" })}
                   label="Description"
                   variant="underlined"
                   className="w-full"
                 />
                 <ErrorMessage
                   name="body"
-                  errors={postErrors}
+                  errors={errors}
                   render={({ message }) => (
                     <p className="text-red-500 text-sm font-semibold">
                       {message}
@@ -217,69 +164,7 @@ export default function Page({ params }: { params: { _id: string } }) {
       </div>
 
       {/* Comments */}
-      {post?.comments?.map((data: Comment) => (
-        <div
-          key={data.id}
-          className="flex flex-col md:flex-row md:rounded-xl border w-full"
-        >
-          <div>
-            <UserCard data={data} />
-          </div>
-          <div className="flex flex-col p-10 w-full">
-            {editingComment && commentId === data.id ? (
-              <form onSubmit={commentHandleSubmit(onCommentSubmit)}>
-                <Textarea
-                  {...commentRegister("comment", {
-                    required: "Comment can not be empty",
-                    maxLength: {
-                      value: 1000,
-                      message: "Comment cannot be over 1000 characters",
-                    },
-                  })}
-                  type="text"
-                />
-                <ErrorMessage
-                  name="comment"
-                  errors={commentErrors}
-                  render={({ message }) => (
-                    <p className="text-red-500 text-sm font-semibold">
-                      {message}
-                    </p>
-                  )}
-                ></ErrorMessage>
-                <Button variant="ghost" type="submit">
-                  Confirm
-                </Button>
-              </form>
-            ) : (
-              <p>{data?.body}</p>
-            )}
-            {userId === data?.user?.id && (
-              <div className="flex justify-end border-t mt-5">
-                <Button
-                  onClick={() => handleEditComment(data?.id)}
-                  variant="light"
-                  className="mt-2"
-                  type="submit"
-                >
-                  {!editingComment ? "Edit" : "Cancel"}
-                </Button>
-                <DeleteModal type="comment" id={data?.id} />
-              </div>
-            )}
-            <div className="flex my-6 items-center gap-3">
-              <p className="text-gray-500 text-sm ">
-                Created at {data?.createdAt.slice(0, 10)}
-              </p>
-              {data?.createdAt !== data?.editedAt && (
-                <p className="text-gray-500 text-sm italic pr-2">
-                  Edited at {data?.editedAt.slice(0, 10)}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      ))}
+      <Comments post={post} />
       <CommentForm params={params} isLoading={isLoading} />
     </section>
   );
