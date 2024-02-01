@@ -27,6 +27,8 @@ const UserCard = ({ data, isLoading }: props) => {
     Date.now() - new Date(data?.user?.createdAt).getTime() <
     1000 * 60 * 60 * 24 * 1;
 
+  console.log("new?", data);
+
   return (
     <Card className="p-5 min-w-[15rem] h-full shadow-none border-b-1 border-gray-300 md:border-none">
       <CardHeader className="flex justify-center">
