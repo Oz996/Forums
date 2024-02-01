@@ -36,8 +36,6 @@ export default function Register() {
     }
   }, [premium]);
 
-  console.log(membership, "22");
-
   const {
     register,
     handleSubmit,

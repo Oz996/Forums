@@ -32,11 +32,11 @@ export async function POST(req: NextRequest) {
     }
 
     const secretKey = process.env.SECRET_KEY;
-    const isPremium = user.premium ? true : false;
+    const premium = user.premium ? true : false;
 
     const tokenData = {
       userId: user.id,
-      premium: isPremium,
+      premium,
     };
 
     const token = jwt.sign(tokenData, secretKey!, {
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const res = NextResponse.json({
       success: true,
       userId: user.id,
-      premium: isPremium,
+      premium,
       userEmail: email,
     });
     res.cookies.set("token", token, { httpOnly: true, secure: true });

@@ -20,7 +20,7 @@ export default function Home() {
     { id: 1, value: "red", name: "Red" },
     { id: 2, value: "blue", name: "Blue" },
     { id: 3, value: "yellow", name: "Yellow" },
-    { id: 3, value: "orange", name: "Orange" },
+    { id: 4, value: "orange", name: "Orange" },
   ];
 
   console.log(posts);
@@ -58,13 +58,12 @@ export default function Home() {
         <div className="lg:max-w-[62rem] w-full">
           {posts
             ?.filter((post: Post) => {
-              const searchPost =
+              return (
                 search.trim() === "" ||
                 post?.title.toLowerCase().includes(search.toLowerCase()) ||
-                post?.category.toLowerCase().includes(search.toLowerCase());
-              return searchPost;
+                post?.category.toLowerCase().includes(search.toLowerCase())
+              );
             })
-            .reverse()
             .map((post: Post) => (
               <PostCard key={post.id} post={post} />
             ))}

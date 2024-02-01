@@ -10,6 +10,9 @@ export async function GET() {
         comments: true,
         user: true,
       },
+      orderBy: {
+        id: "desc",
+      },
     });
     return NextResponse.json(posts, { status: 200 });
   } catch (error) {
