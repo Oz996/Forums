@@ -17,7 +17,6 @@ const PostCard = ({ post }: { post: Post }) => {
   };
 
   const body = substring();
-  console.log(post);
   const { theme } = useTheme();
 
   const isNew =
@@ -32,6 +31,7 @@ const PostCard = ({ post }: { post: Post }) => {
           "border-b-blue-500": post?.category === "blue",
           "border-b-red-500": post?.category === "red",
           "border-b-yellow-400": post?.category === "yellow",
+          "border-b-orange-500": post?.category === "orange",
           "hover:bg-gray-800": theme === "dark",
           "hover:bg-gray-100": theme !== "dark",
         })}
@@ -66,6 +66,7 @@ const PostCard = ({ post }: { post: Post }) => {
                 "bg-red-500": post?.category === "red",
                 "bg-blue-500": post?.category === "blue",
                 "bg-yellow-500": post?.category === "yellow",
+                "bg-orange-500": post?.category === "orange",
               })}
             >
               new

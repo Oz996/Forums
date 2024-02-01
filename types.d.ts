@@ -37,6 +37,7 @@ export interface Categories {
   id: number;
   value: string;
   name: string;
+  disabled?: boolean;
 }
 
 export interface Token {

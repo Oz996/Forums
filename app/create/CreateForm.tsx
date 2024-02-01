@@ -6,19 +6,24 @@ import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { getBaseUrl } from "@/lib/utils/URL";
 
 const CreateForm = () => {
   const router = useRouter();
-  const { isAuthenticated, userId } = useAuth();
+  const { premium, userId } = useAuth();
 
   const categories: Categories[] = [
     { id: 0, value: "red", name: "Red" },
     { id: 1, value: "blue", name: "Blue" },
     { id: 2, value: "yellow", name: "Yellow" },
+    { id: 3, value: "orange", name: "Orange", disabled: false },
   ];
+
+  if (!premium) {
+    categories.at(-1)!.disabled = true;
+    categories.at(-1)!.name += " - Premium only";
+  }
 
   const {
     register,
@@ -27,8 +32,6 @@ const CreateForm = () => {
   } = useForm<Post>();
 
   const newPostMutation = async (data: Post) => {
-    if (!isAuthenticated) return router.push("/login");
-
     const postData = {
       ...data,
       userId,
@@ -59,7 +62,14 @@ const CreateForm = () => {
           label="Select Category"
         >
           {categories.map((category) => (
-            <SelectItem key={category.value} value={category.value}>
+            <SelectItem
+              isDisabled={category.disabled}
+              className={
+                category.value === "orange" && premium ? "text-orange-400" : ""
+              }
+              key={category.value}
+              value={category.value}
+            >
               {category.name}
             </SelectItem>
           ))}
@@ -73,7 +83,7 @@ const CreateForm = () => {
         ></ErrorMessage>
 
         <Input
-          {...register("title", { required: "This field is required" })}
+          {...register("title", { required: "Title is required" })}
           type="text"
           label="Title"
         />
@@ -85,7 +95,7 @@ const CreateForm = () => {
           )}
         ></ErrorMessage>
         <Textarea
-          {...register("body", { required: "This field is required" })}
+          {...register("body", { required: "Description is required" })}
           type="text"
           label="Description"
           labelPlacement="inside"

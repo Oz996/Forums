@@ -18,7 +18,7 @@ const Header = () => {
   const pathName = usePathname();
   console.log(pathName);
 
-  const hiddenRoutes = ["/plan", "/login", "/register"];
+  const hiddenRoutes = ["/plan", "/login", "/register", "/upgrade"];
 
   useEffect(() => {
     setMounted(true);
@@ -71,7 +71,10 @@ const Header = () => {
         </div>
       </Navbar>
       {!premium && isAuthenticated && (
-        <Link href={"/upgrade"}>
+        <Link
+          href={"/upgrade"}
+          className={hiddenRoutes.includes(pathName) ? "hidden" : ""}
+        >
           <div className="h-[1.7rem] w-full absolute right-0 left-0 top-12 bg-primary-400 flex items-center justify-center text-white">
             <p>Upgrade to Premium </p>
           </div>

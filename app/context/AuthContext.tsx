@@ -1,4 +1,5 @@
 "use client";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactElement, useEffect, useState } from "react";
 import { createContext } from "react";
 import { useCookies } from "react-cookie";
@@ -85,7 +86,15 @@ export const AuthContextProvider = ({
     }
   };
 
+  // Redirect user to home page if logged out in create post page
+
+  const path = usePathname();
+  const route = useRouter();
+
   const handleLogout = () => {
+    if (path === "/create") {
+      route.push("/");
+    }
     setPremium(false);
     setIsAuthenticated(false);
     setUserEmail(null);

@@ -132,7 +132,7 @@ export default function Page({ params }: { params: { _id: string } }) {
                   )}
                 ></ErrorMessage>
                 <Textarea
-                  {...register("body", { required: "Body is required" })}
+                  {...register("body", { required: "Description is required" })}
                   label="Description"
                   variant="underlined"
                   className="w-full"
