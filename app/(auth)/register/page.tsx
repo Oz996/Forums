@@ -46,7 +46,7 @@ export default function Register() {
   } = useForm();
 
   const registerMutation = async (data: RegisterUser) => {
-    const postdata = membership ? { ...data, isPremium: true } : data;
+    const postdata = membership ? { ...data, premium: true } : data;
     const res = await axios.post(getBaseUrl() + "/api/register", postdata);
     return res.data;
   };
