@@ -27,7 +27,7 @@ const CommentForm = ({ params, isLoading }: props) => {
   } = useForm();
 
   const queryClient = useQueryClient();
-  const { userId } = useAuth();
+  const { userId, isAuthenticated } = useAuth();
 
   const commentMutation = async (data: Comment) => {
     const postData = {
@@ -57,9 +57,11 @@ const CommentForm = ({ params, isLoading }: props) => {
   };
 
   const comment = watch("body");
-  const commentIsEmpty = comment?.trim() === "" || comment?.length === 0;
+  const commentIsEmpty =
+    comment?.trim() === "" || comment?.length === 0 || comment?.length == null;
+  console.log(comment?.length);
 
-  const disabled = commentIsEmpty || isLoading || formLoading;
+  const disabledButton = commentIsEmpty || isLoading || formLoading;
 
   return (
     <section className="p-10 md:rounded-xl border">
@@ -73,6 +75,8 @@ const CommentForm = ({ params, isLoading }: props) => {
               message: "Comment cannot be over 1000 characters",
             },
           })}
+          isDisabled={!isAuthenticated}
+          placeholder={!isAuthenticated ? "Sign in to post a comment" : ""}
           type="text"
         />
         <ErrorMessage
@@ -85,12 +89,12 @@ const CommentForm = ({ params, isLoading }: props) => {
 
         <div className="flex justify-end mt-5 items-center">
           <Button
-            disabled={disabled}
+            disabled={disabledButton}
             type="submit"
-            color={disabled ? "default" : "primary"}
+            color={disabledButton ? "default" : "primary"}
             className={classNames({
               "cursor-pointer py-6": true,
-              "cursor-not-allowed": disabled,
+              "cursor-not-allowed": disabledButton,
             })}
           >
             {formLoading && <Spinner size="sm" color="primary" />}

@@ -80,6 +80,7 @@ export default function Register() {
           {...register("userName", { required: "This field is required" })}
           type="text"
           label="Username"
+          isInvalid={!!errors.userName}
         />
         <ErrorMessage
           errors={errors}
@@ -92,6 +93,7 @@ export default function Register() {
           {...register("email", { required: "This field is required" })}
           type="email"
           label="Email"
+          isInvalid={!!errors.email}
         />
         <ErrorMessage
           errors={errors}
@@ -106,6 +108,7 @@ export default function Register() {
           })}
           type="password"
           label="Password"
+          isInvalid={!!errors.password}
         />
         <ErrorMessage
           errors={errors}
@@ -121,6 +124,7 @@ export default function Register() {
           })}
           type="password"
           label="Confirm Password"
+          isInvalid={!!errors.Cpassword}
         />
         <ErrorMessage
           errors={errors}
@@ -139,6 +143,7 @@ export default function Register() {
               })}
               type="text"
               label="Cardholder Name"
+              isInvalid={!!errors.cardName}
             />
             <ErrorMessage
               errors={errors}
@@ -154,6 +159,7 @@ export default function Register() {
               })}
               type="text"
               label="Card Number"
+              isInvalid={!!errors.cardNumber}
             />
             <ErrorMessage
               errors={errors}

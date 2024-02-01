@@ -126,6 +126,7 @@ const Guestbook = ({ user, params }: props) => {
           type="text"
           {...register("body", { required: "Comment can not be empty" })}
           placeholder="Leave a comment..."
+          isInvalid={!!errors.body}
         />
         <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 justify-between items-center w-full">
           <ErrorMessage

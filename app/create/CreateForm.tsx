@@ -58,6 +58,7 @@ const CreateForm = () => {
       <h1 className="text-center font-semibold text-xl"></h1>
       <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
         <Select
+          isInvalid={!!errors.category}
           {...register("category", { required: "Select a category" })}
           label="Select Category"
         >
@@ -86,6 +87,7 @@ const CreateForm = () => {
           {...register("title", { required: "Title is required" })}
           type="text"
           label="Title"
+          isInvalid={!!errors.title}
         />
         <ErrorMessage
           errors={errors}
@@ -99,6 +101,7 @@ const CreateForm = () => {
           type="text"
           label="Description"
           labelPlacement="inside"
+          isInvalid={!!errors.body}
         />
         <ErrorMessage
           errors={errors}

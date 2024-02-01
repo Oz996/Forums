@@ -58,9 +58,12 @@ export default function Login() {
       <h1 className="text-center font-semibold text-xl">Sign in</h1>
       <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
         <Input
-          {...register("email", { required: "This field is required" })}
+          {...register("email", {
+            required: "This field is required",
+          })}
           type="email"
           label="Email"
+          isInvalid={!!errors.email}
         />
         <ErrorMessage
           errors={errors}
@@ -73,6 +76,7 @@ export default function Login() {
           {...register("password", { required: "This field is required" })}
           type="password"
           label="Password"
+          isInvalid={!!errors.password}
         />
         <ErrorMessage
           errors={errors}

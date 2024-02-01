@@ -98,6 +98,7 @@ export const AuthContextProvider = ({
     setPremium(false);
     setIsAuthenticated(false);
     setUserEmail(null);
+    setUserId(null);
     localStorage.clear();
   };
 
