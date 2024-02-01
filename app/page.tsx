@@ -5,7 +5,6 @@ import PostCard from "@/components/PostCard";
 import { Card, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
 import { Categories, Post } from "@/types";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function Home() {
   const [search, setSearch] = useState("");

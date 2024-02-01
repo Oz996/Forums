@@ -69,7 +69,7 @@ export default function Page({ params }: { params: { _id: string } }) {
     <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
       <div className="flex flex-col md:flex-row rounded-xl border">
         <div>
-          <UserCard data={data} isLoading={isLoading} />
+          <UserCard user={data?.user} isLoading={isLoading} />
         </div>
         <div className="flex flex-col p-10 w-full">
           <div className="flex flex-col md:flex-row justify-between">

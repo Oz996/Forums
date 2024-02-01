@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import classnames from "classnames";
 import UserAvatar from "./UserAvatar";
+import { isNew } from "@/lib/utils/newDate";
 
 const PostCard = ({ post }: { post: Post }) => {
   const substring = () => {
@@ -19,8 +20,7 @@ const PostCard = ({ post }: { post: Post }) => {
   const body = substring();
   const { theme } = useTheme();
 
-  const isNew =
-    Date.now() - new Date(post?.createdAt).getTime() < 1000 * 60 * 60 * 24 * 1;
+  const newPost = isNew(post);
 
   return (
     <Link href={`/post/${post?.id}`}>
@@ -38,7 +38,7 @@ const PostCard = ({ post }: { post: Post }) => {
       >
         <CardHeader className="flex gap-5 mb-2">
           <div>
-            <UserAvatar image={post?.user?.image} />
+            <UserAvatar user={post?.user} image={post?.user?.image} />
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-xl font-semibold">{post?.title}</p>
@@ -59,7 +59,7 @@ const PostCard = ({ post }: { post: Post }) => {
         <Divider />
         <div className="lg:px-20 mt-10">
           <p className="mb-3">{body}</p>
-          {isNew && (
+          {newPost && (
             <Chip
               className={classnames({
                 "text-white uppercase": true,

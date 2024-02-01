@@ -24,7 +24,7 @@ export interface User {
   editedAt: string;
   posts: Post[];
   ProfileCommentReceived: ProfileComment[];
-  isPremium: boolean;
+  premium: boolean;
 }
 
 export interface RegisterUser extends User {

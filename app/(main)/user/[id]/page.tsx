@@ -82,7 +82,11 @@ export default function User({ params }: { params: { id: string } }) {
       <div className="md:max-w-[62rem] mx-auto flex flex-col gap-5">
         <Card className="md:p-10 p-3 grid grid-cols-1 gap-10 lg:gap-0 lg:grid-cols-2 lg:h-[35rem]">
           <div className="flex flex-col gap-4 justify-center items-center">
-            <UserAvatar image={user?.image} className="mx-auto w-28 h-28" />
+            <UserAvatar
+              image={user?.image}
+              user={user}
+              className="mx-auto w-28 h-28"
+            />
             {!editing ? (
               <div>
                 <div className="grid grid-cols-2 gap-2">

@@ -68,7 +68,7 @@ const Comments = ({ post }: props) => {
           className="flex flex-col md:flex-row md:rounded-xl border w-full"
         >
           <div>
-            <UserCard data={data} />
+            <UserCard user={data?.user} />
           </div>
           <div className="flex flex-col p-10 w-full">
             {editingComment && commentId === data.id ? (

@@ -12,37 +12,23 @@ import classnames from "classnames";
 import UserAvatar from "./UserAvatar";
 
 interface props {
-  data: {
-    user: User;
-  };
+  user: User;
+
   isLoading?: boolean;
 }
 
-const UserCard = ({ data, isLoading }: props) => {
-  const numberOfPosts = data?.user?.posts?.length;
+const UserCard = ({ user, isLoading }: props) => {
+  const numberOfPosts = user?.posts?.length;
   const newbie = numberOfPosts < 1;
   const member = numberOfPosts > 0 && numberOfPosts < 3;
   const regular = numberOfPosts >= 3;
-  const isNew =
-    Date.now() - new Date(data?.user?.createdAt).getTime() <
-    1000 * 60 * 60 * 24 * 1;
-
-  console.log("new?", data);
 
   return (
     <Card className="p-5 min-w-[15rem] h-full shadow-none border-b-1 border-gray-300 md:border-none">
       <CardHeader className="flex justify-center">
-        {isNew ? (
-          <Badge content="new" color="danger">
-            <Link href={`/user/${data?.user?.id}`}>
-              <UserAvatar image={data?.user?.image} />
-            </Link>
-          </Badge>
-        ) : (
-          <Link href={`/user/${data?.user?.id}`}>
-            <UserAvatar image={data?.user?.image} />
-          </Link>
-        )}
+        <Link href={`/user/${user?.id}`}>
+          <UserAvatar image={user?.image} user={user} />
+        </Link>
       </CardHeader>
       <CardBody className="text-center">
         <Skeleton
@@ -50,7 +36,7 @@ const UserCard = ({ data, isLoading }: props) => {
           className={isLoading ? "rounded-t-lg" : ""}
         >
           {isLoading && <p> text</p>}
-          <p>{data?.user?.userName}</p>
+          <p>{user?.userName}</p>
         </Skeleton>
         <Skeleton isLoaded={!isLoading} className={isLoading ? " " : ""}>
           {isLoading && <p> text</p>}
@@ -71,7 +57,7 @@ const UserCard = ({ data, isLoading }: props) => {
           isLoaded={!isLoading}
           className={isLoading ? "rounded-b-lg" : ""}
         >
-          <p>Joined: {data?.user?.createdAt?.slice(0, 10)}</p>
+          <p>Joined: {user?.createdAt?.slice(0, 10)}</p>
         </Skeleton>
       </CardBody>
     </Card>
