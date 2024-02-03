@@ -16,7 +16,11 @@ export async function GET(
             sender: true,
           },
         },
-        comments: true,
+        comments: {
+          include: {
+            post: true,
+          },
+        },
         posts: {
           include: {
             comments: true,

@@ -9,6 +9,7 @@ interface props {
 }
 
 const UserPosts = ({ posts, comments, isUser }: props) => {
+  console.log("comments", comments);
   return (
     <>
       <div>

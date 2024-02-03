@@ -21,6 +21,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import classnames from "classnames";
+import UserAvatar from "@/components/UserAvatar";
 
 interface props {
   user: User;
@@ -85,6 +86,9 @@ const Guestbook = ({ user, params }: props) => {
 
   const disabledButton = textIsEmpty || isLoading;
 
+  console.log("comments2", comments);
+  console.log("user2", user);
+
   return (
     <div className="flex flex-col gap-5 lg:max-h-[31rem]">
       <h2 className="text-center text-xl font-semibold">Guestbook</h2>
@@ -98,7 +102,11 @@ const Guestbook = ({ user, params }: props) => {
         {comments?.map((comment) => (
           <div key={comment?.id} className="flex gap-3">
             <Link href={comment?.sender?.id}>
-              <Avatar src={comment?.sender?.image} alt="" />
+              <UserAvatar
+                user={comment?.sender}
+                image={comment?.sender?.image}
+                className="h-10 w-10"
+              />
             </Link>
             <div
               className={classnames({
