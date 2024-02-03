@@ -26,7 +26,7 @@ export default function Home() {
   console.log(posts);
   return (
     <section className="flex min-h-screen flex-col items-center">
-      <div className="md:w-[62rem] w-full">
+      <div className="lg:max-w-[62rem] w-full">
         <Card className="p-10">
           <div className="flex flex-col md:flex-row gap-3">
             <div className="md:w-[30%]">

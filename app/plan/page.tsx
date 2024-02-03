@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import BackArrow from "@/components/BackArrow";
 
 export default function Page() {
   const { data, isLoading } = useQuery({
@@ -17,7 +18,7 @@ export default function Page() {
   });
   console.log(data);
   const router = useRouter();
-  const { isAuthenticated, setPremium } = useAuth();
+  const { setPremium } = useAuth();
 
   // useEffect(() => {
   //   if (isAuthenticated) {
@@ -32,6 +33,7 @@ export default function Page() {
 
   return (
     <section className="container mx-auto pb-5 lg:pb-0 pt-10">
+      <BackArrow />
       <h1 className="text-4xl font-semibold text-center capitalize pb-20">
         choose your plan
       </h1>

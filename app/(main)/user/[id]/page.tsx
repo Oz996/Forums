@@ -13,6 +13,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Skeleton,
   Textarea,
 } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -26,10 +27,11 @@ import classnames from "classnames";
 import Guestbook from "./Guestbook";
 import DeleteModal from "@/components/DeleteModal";
 import UserAvatar from "@/components/UserAvatar";
+import UserPosts from "./UserPosts";
 
 export default function User({ params }: { params: { id: string } }) {
   const [editing, setEditing] = useState(false);
-  const { data } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUser(params.id),
   });
@@ -41,7 +43,7 @@ export default function User({ params }: { params: { id: string } }) {
     setValue,
     formState: { errors },
   } = useForm();
-  console.log(data);
+
   const handleEditClick = () => {
     setValue("email", user?.email || "");
     setValue("userName", user?.userName || "");
@@ -69,7 +71,6 @@ export default function User({ params }: { params: { id: string } }) {
   const onSubmit = (data: FieldValues) => {
     mutation.mutate(data as UserData);
   };
-  const user = data;
   const numberOfPosts = user?.posts?.length;
   const email = user?.email;
   const isUser = userEmail === email;
@@ -83,6 +84,7 @@ export default function User({ params }: { params: { id: string } }) {
         <Card className="md:p-10 p-3 grid grid-cols-1 gap-10 lg:gap-0 lg:grid-cols-2 lg:h-[35rem]">
           <div className="flex flex-col gap-4 justify-center items-center">
             <UserAvatar
+              isLoading={isLoading}
               image={user?.image}
               user={user}
               className="mx-auto w-28 h-28"
@@ -90,7 +92,12 @@ export default function User({ params }: { params: { id: string } }) {
             {!editing ? (
               <div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="flex gap-1 items-center">
+                  <div
+                    className={classnames({
+                      "flex gap-1 items-center": true,
+                      "w-[10rem]": isLoading,
+                    })}
+                  >
                     <p className="font-semibold">Rank</p>
                     <Popover placement="right">
                       <PopoverTrigger>
@@ -114,32 +121,49 @@ export default function User({ params }: { params: { id: string } }) {
                       </PopoverContent>
                     </Popover>
                   </div>
-                  <p
-                    className={classnames({
-                      "font-semibold self-center": true,
-                      "text-blue-600": member,
-                      "text-purple-600": regular,
-                    })}
-                  >
-                    {newbie
-                      ? "Newbie"
-                      : member
-                      ? "Member"
-                      : regular
-                      ? "Regular"
-                      : ""}
-                  </p>
+                  {!isLoading ? (
+                    <p
+                      className={classnames({
+                        "font-semibold self-center": true,
+                        "text-blue-600": member,
+                        "text-purple-600": regular,
+                      })}
+                    >
+                      {newbie
+                        ? "Newbie"
+                        : member
+                        ? "Member"
+                        : regular
+                        ? "Regular"
+                        : ""}
+                    </p>
+                  ) : (
+                    <Skeleton className="w-full h-6 rounded-full" />
+                  )}
+
                   <p className="font-semibold">Posts</p>
-                  <p>{user?.posts.length}</p>
+                  {!isLoading ? (
+                    <p>{user?.posts.length}</p>
+                  ) : (
+                    <Skeleton className="w-full h-6 rounded-full" />
+                  )}
                   {isUser && (
                     <>
                       <p className="font-semibold">Email</p> <p>{email}</p>
                     </>
                   )}
                   <p className="font-semibold">Username</p>
-                  <p>{user?.userName}</p>
+                  {!isLoading ? (
+                    <p>{user?.userName}</p>
+                  ) : (
+                    <Skeleton className="w-full h-6 rounded-full" />
+                  )}
                   <p className="font-semibold">Joined</p>
-                  <p>{user?.createdAt.slice(0, 10)}</p>
+                  {!isLoading ? (
+                    <p>{user?.createdAt.slice(0, 10)}</p>
+                  ) : (
+                    <Skeleton className="w-full h-6 rounded-full" />
+                  )}
                   {isUser && (
                     <>
                       <Button
@@ -218,34 +242,11 @@ export default function User({ params }: { params: { id: string } }) {
           </div>
           <Guestbook user={user} params={params} />
         </Card>
-        <div>
-          {user?.posts.length === 0 ? (
-            <h2 className="text-center text-xl font-semibold mb-5">No posts</h2>
-          ) : (
-            <h2 className="text-center text-xl font-semibold mb-5">
-              {isUser ? "Your Posts" : "Users Posts"}
-            </h2>
-          )}
-          {user?.posts?.map((post: Post) => (
-            <PostCard key={post?.id} post={post} />
-          ))}
-        </div>
-        <div>
-          {user?.comments.length === 0 ? (
-            <h2 className="text-center text-xl font-semibold mb-5">
-              No comments
-            </h2>
-          ) : (
-            <h2 className="text-center text-xl font-semibold mb-5">
-              {isUser ? "Your Latest Comments" : "Users Latest Comments"}
-            </h2>
-          )}
-          {user?.comments?.map((comment: Comment) => (
-            <div key={comment?.id}>
-              <p>{comment?.body}</p>
-            </div>
-          ))}
-        </div>
+        <UserPosts
+          posts={user?.posts}
+          comments={user?.comments}
+          isUser={isUser}
+        />
       </div>
     </section>
   );

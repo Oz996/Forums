@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { User } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
+import BackArrow from "@/components/BackArrow";
 
 export default function Login() {
   const { handleLogin, isAuthenticated } = useAuth();

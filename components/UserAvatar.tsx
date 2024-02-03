@@ -2,7 +2,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { isNew } from "@/lib/utils/newDate";
 import { User } from "@/types";
-import { Avatar, Badge } from "@nextui-org/react";
+import { Avatar, Badge, Skeleton } from "@nextui-org/react";
 import { FaStar } from "react-icons/fa";
 import React from "react";
 import { usePathname } from "next/navigation";
@@ -11,13 +11,21 @@ interface props {
   image: string;
   user: User;
   className?: string;
+  isLoading?: boolean;
 }
 
-const UserAvatar = ({ image, className, user }: props) => {
+const UserAvatar = ({ image, className, user, isLoading }: props) => {
   const { premium } = useAuth();
   const newUser = isNew(user);
   const path = usePathname();
   const userPage = path.startsWith("/user");
+
+  if (isLoading)
+    return (
+      <Skeleton
+        className={`${className ? className : "h-14 w-14"} rounded-full`}
+      />
+    );
 
   return (
     <Badge

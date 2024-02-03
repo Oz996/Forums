@@ -27,7 +27,7 @@ const UserCard = ({ user, isLoading }: props) => {
     <Card className="p-5 min-w-[15rem] h-full shadow-none border-b-1 border-gray-300 md:border-none">
       <CardHeader className="flex justify-center">
         <Link href={`/user/${user?.id}`}>
-          <UserAvatar image={user?.image} user={user} />
+          <UserAvatar isLoading={isLoading} image={user?.image} user={user} />
         </Link>
       </CardHeader>
       <CardBody className="text-center">
