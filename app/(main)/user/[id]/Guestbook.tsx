@@ -39,6 +39,7 @@ const Guestbook = ({ user, params }: props) => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -75,6 +76,14 @@ const Guestbook = ({ user, params }: props) => {
   };
 
   const comments = user?.ProfileCommentReceived;
+
+  const textField = watch("body");
+  const textIsEmpty =
+    textField?.trim() === "" ||
+    textField?.length === 0 ||
+    textField?.length == null;
+
+  const disabledButton = textIsEmpty || isLoading;
 
   return (
     <div className="flex flex-col gap-5 lg:max-h-[31rem]">
@@ -137,11 +146,12 @@ const Guestbook = ({ user, params }: props) => {
             )}
           ></ErrorMessage>
           <Button
+            isDisabled={disabledButton}
             type="submit"
-            className="capitalize lg:ml-auto"
-            color="primary"
+            color={disabledButton ? "default" : "primary"}
+            className="lg:ml-auto"
           >
-            post comment
+            Post Comment
           </Button>
         </div>
       </form>

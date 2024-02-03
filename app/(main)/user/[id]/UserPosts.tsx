@@ -12,7 +12,7 @@ const UserPosts = ({ posts, comments, isUser }: props) => {
   return (
     <>
       <div>
-        {posts.length === 0 ? (
+        {posts?.length === 0 ? (
           <h2 className="text-center text-xl font-semibold mb-5">No posts</h2>
         ) : (
           <h2 className="text-center text-xl font-semibold mb-5">
@@ -24,7 +24,7 @@ const UserPosts = ({ posts, comments, isUser }: props) => {
         ))}
       </div>
       <div>
-        {comments.length === 0 ? (
+        {comments?.length === 0 ? (
           <h2 className="text-center text-xl font-semibold mb-5">
             No comments
           </h2>

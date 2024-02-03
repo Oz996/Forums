@@ -89,13 +89,10 @@ const CommentForm = ({ params, isLoading }: props) => {
 
         <div className="flex justify-end mt-5 items-center">
           <Button
-            disabled={disabledButton}
+            isDisabled={disabledButton}
             type="submit"
             color={disabledButton ? "default" : "primary"}
-            className={classNames({
-              "cursor-pointer py-6": true,
-              "cursor-not-allowed": disabledButton,
-            })}
+            className="py-6"
           >
             {formLoading && <Spinner size="sm" color="primary" />}
             Post Comment

@@ -20,6 +20,7 @@ export async function GET(
         posts: {
           include: {
             comments: true,
+            user: true,
           },
         },
       },

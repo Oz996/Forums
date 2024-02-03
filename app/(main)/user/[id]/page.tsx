@@ -55,6 +55,8 @@ export default function User({ params }: { params: { id: string } }) {
     console.log(res);
   };
 
+  console.log("user", user);
+
   const mutation = useMutation(userMutation, {
     onSuccess: () => {
       setEditing(false);
