@@ -8,7 +8,7 @@ const BackArrow = () => {
 
   return (
     <div
-      className="flex gap-1 items-center absolute top-[5rem] left-[33rem] cursor-pointer"
+      className="hidden lg:flex gap-1 items-center lg:absolute top-[5rem] left-[32%] cursor-pointer"
       onClick={() => router.back()}
     >
       <IoIosArrowBack size={22} />
