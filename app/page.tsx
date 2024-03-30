@@ -2,7 +2,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "./api/services/api";
 import PostCard from "@/components/PostCard";
-import { Card, Skeleton } from "@nextui-org/react";
 import { Post } from "@/types";
 import { useState } from "react";
 import SearchPost from "./SearchPost";

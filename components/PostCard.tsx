@@ -8,18 +8,7 @@ import UserAvatar from "./UserAvatar";
 import { isNew } from "@/lib/utils/newDate";
 
 const PostCard = ({ post }: { post: Post }) => {
-  const substring = () => {
-    const body = post?.body;
-    const bodyLength = post?.body.length > 200;
-    if (bodyLength) {
-      return body.substring(0, 200) + "...";
-    }
-    return body;
-  };
-
-  const body = substring();
   const { theme } = useTheme();
-
   const newPost = isNew(post);
 
   return (
@@ -57,8 +46,8 @@ const PostCard = ({ post }: { post: Post }) => {
           </div>
         </CardHeader>
         <Divider />
-        <div className="lg:px-20 mt-10">
-          <p className="mb-3">{body}</p>
+        <div className="lg:px-20 mt-10 line-clamp-3">
+          <p className="mb-3">{post?.body}</p>
           {newPost && (
             <Chip
               className={classnames({
