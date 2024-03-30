@@ -12,6 +12,7 @@ import classNames from "classnames";
 import PremiumBanner from "./PremiumBanner";
 
 const Header = () => {
+  const [mounted, setMounted] = useState(false);
   const { isAuthenticated, premium } = useAuth();
   const { theme, setTheme } = useTheme();
 
@@ -19,6 +20,15 @@ const Header = () => {
   console.log(pathName);
 
   const hiddenRoutes = ["/plan", "/login", "/register", "/upgrade"];
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted)
+    return (
+      <Navbar className="w-full h-[3rem] bg-primary-600 absolute top-0 left-0 items-center text-white duration-200"></Navbar>
+    );
 
   console.log(theme);
   return (
