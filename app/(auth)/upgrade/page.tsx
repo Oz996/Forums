@@ -46,10 +46,14 @@ export default function Upgrade() {
 
   return (
     <>
-      <h1 className="text-center font-semibold text-xl">Upgrade to Premium</h1>
-      <h2 className="text-center text-primary-600 font-semibold text-lg -mt-5">
-        12€ / Month
-      </h2>
+      <hgroup>
+        <h1 className="text-center font-semibold text-xl">
+          Upgrade to Premium
+        </h1>
+        <p className="text-center text-primary-600 font-semibold text-lg mt-5">
+          12€ / Month
+        </p>
+      </hgroup>
       <form
         className="flex flex-col gap-5"
         onSubmit={handleSubmit(handlePremiumUpgrade)}
