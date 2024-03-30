@@ -18,15 +18,9 @@ import {
 
 export default function Register() {
   const [membership, setMembership] = useState(false);
-  const { isAuthenticated, premium, setPremium } = useAuth();
+  const { premium, setPremium } = useAuth();
 
   const router = useRouter();
-
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     router.push("/");
-  //   }
-  // }, [isAuthenticated, router]);
 
   useEffect(() => {
     if (premium) {

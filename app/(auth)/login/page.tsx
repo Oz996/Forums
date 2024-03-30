@@ -7,21 +7,13 @@ import axios from "axios";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { User } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
-import BackArrow from "@/components/BackArrow";
 
 export default function Login() {
-  const { handleLogin, isAuthenticated } = useAuth();
+  const { handleLogin } = useAuth();
   const router = useRouter();
-
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     router.push("/");
-  //   }
-  // }, [isAuthenticated, router]);
 
   const {
     register,

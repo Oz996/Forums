@@ -61,6 +61,7 @@ export default function Upgrade() {
             validate: validateCardName,
           })}
           label="Cardholder Name"
+          isInvalid={!!errors.cardName}
         />
         <ErrorMessage
           errors={errors}
@@ -76,6 +77,7 @@ export default function Upgrade() {
             validate: validateCardNumber,
           })}
           label="Card Number"
+          isInvalid={!!errors.cardNumber}
         />
         <ErrorMessage
           errors={errors}
