@@ -9,11 +9,12 @@ import PostsSkeleton from "./PostsSkeleton";
 
 export default function Posts() {
   const [search, setSearch] = useState("");
-  const { data: posts, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: getPosts,
   });
 
+  const posts = data || [];
   console.log(search);
   console.log(posts);
 

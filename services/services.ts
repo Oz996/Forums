@@ -5,11 +5,10 @@ export const getPosts = async () => {
   try {
     const res = await axios.get(getBaseUrl() + "/api/posts");
     const data = res.data;
+    console.log("posts data", data);
     return data;
-    // console.log("ran ran ran");
-    // const res = fetch(getBaseUrl() + "/api/posts");
-    // const data = (await res).json();
-    // return data;
+    // const res = await fetch(getBaseUrl() + "/api/posts");
+    // return await res.json();
   } catch (error: any) {
     console.error(error.message);
   }
