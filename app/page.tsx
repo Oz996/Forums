@@ -5,12 +5,18 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import axios from "axios";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 export default async function Home() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["posts"],
-    queryFn: getPosts,
+    queryFn: async () => {
+      const res = await axios.get(getBaseUrl() + "/api/posts");
+      const data = res.data;
+      return data;
+    },
   });
   return (
     <>
