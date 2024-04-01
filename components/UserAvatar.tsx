@@ -1,5 +1,4 @@
 "use client";
-import { useAuth } from "@/hooks/useAuth";
 import { isNew } from "@/lib/utils/newDate";
 import { User } from "@/types";
 import { Avatar, Badge, Skeleton } from "@nextui-org/react";
@@ -15,7 +14,6 @@ interface props {
 }
 
 const UserAvatar = ({ image, className, user, isLoading }: props) => {
-  const { premium } = useAuth();
   const newUser = isNew(user);
   const path = usePathname();
   const userPage = path.startsWith("/user");

@@ -90,7 +90,7 @@ export async function DELETE(
     });
     const deleteUsersProfileComments = await prisma.profileComment.deleteMany({
       where: {
-        userId: params.id,
+        receiverId: params.id,
       },
     });
     const deleteUser = await prisma.user.delete({

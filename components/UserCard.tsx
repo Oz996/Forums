@@ -1,12 +1,5 @@
 import { User } from "@/types";
-import {
-  Avatar,
-  Badge,
-  Card,
-  CardBody,
-  CardHeader,
-  Skeleton,
-} from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Skeleton } from "@nextui-org/react";
 import Link from "next/link";
 import classnames from "classnames";
 import UserAvatar from "./UserAvatar";
