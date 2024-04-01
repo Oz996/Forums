@@ -9,13 +9,21 @@ import PostsSkeleton from "./PostsSkeleton";
 
 export default function Posts() {
   const [search, setSearch] = useState("");
-  const { data: posts, isLoading } = useQuery({
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["posts"],
     queryFn: getPosts,
   });
 
   console.log(search);
   console.log(posts);
+
+  if (isLoading) return "Loading";
+  if (error) return error.message;
 
   return (
     <section className="flex min-h-screen flex-col items-center">
