@@ -1,20 +1,20 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
-import { getPost } from "../../../api/services/api";
-import CommentForm from "@/app/(main)/post/[_id]/CommentForm";
+import CommentForm from "@/app/post/[_id]/CommentForm";
 import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { FieldValues, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { PostForm, Comment, Post, ICommentForm } from "@/types";
+import { PostForm, Post } from "@/types";
 import { getBaseUrl } from "@/lib/utils/URL";
 import DeleteModal from "@/components/DeleteModal";
 import { ErrorMessage } from "@hookform/error-message";
 import Comments from "./Comments";
 import { formatDate } from "@/lib/utils/formatDate";
+import { getPost } from "@/app/api/services/api";
 
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
