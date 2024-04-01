@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import {
   Button,
   Modal,
@@ -9,7 +9,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
@@ -59,7 +59,7 @@ const DeleteModal = ({ type, id }: props) => {
       const res = await axios.delete(getBaseUrl() + `/api/comment/${id}`);
       if (res.status === 200) {
         toast.success("Comment deleted");
-        queryClient.invalidateQueries(["post"]);
+        queryClient.invalidateQueries(["post"] as InvalidateQueryFilters);
       }
     } catch (error) {
       console.error(error);

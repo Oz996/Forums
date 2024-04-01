@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { RegisterUser } from "@/types";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import {
   validateCardName,
   validateCardNumber,
@@ -43,7 +43,8 @@ export default function Register() {
     return res.data;
   };
 
-  const { mutate, isLoading } = useMutation(registerMutation, {
+  const mutation = useMutation({
+    mutationFn: registerMutation,
     onSuccess: () => {
       setPremium(false);
       localStorage.removeItem("premium");
@@ -51,12 +52,12 @@ export default function Register() {
       toast.success("Signed up");
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error.message);
     },
   });
 
   const onSubmit = (data: FieldValues) => {
-    mutate(data as RegisterUser);
+    mutation.mutate(data as RegisterUser);
   };
 
   const validiatePassword = (value: string) => {
@@ -163,7 +164,7 @@ export default function Register() {
           </>
         )}
         <Button
-          isLoading={isLoading}
+          isLoading={mutation.isPending}
           type="submit"
           className="w-full"
           color="primary"

@@ -1,5 +1,10 @@
 "use client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
 import CommentForm from "@/app/post/[_id]/CommentForm";
 import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
@@ -9,12 +14,12 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { PostForm, Post } from "@/types";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import DeleteModal from "@/components/DeleteModal";
 import { ErrorMessage } from "@hookform/error-message";
 import Comments from "./Comments";
 import { formatDate } from "@/lib/utils/formatDate";
-import { getPost } from "@/app/api/services/api";
+import { getPost } from "@/services/services";
 
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -46,21 +51,22 @@ export default function Page({ params }: { params: { _id: string } }) {
     await axios.put(getBaseUrl() + `/api/post/${params._id}`, postData);
   };
 
-  const postMutation = useMutation(editPostMutation, {
+  const mutation = useMutation({
+    mutationFn: editPostMutation,
     onSuccess: () => {
       toast.success("Post updated");
+      queryClient.invalidateQueries(["post"] as InvalidateQueryFilters);
     },
     onError: (error) => {
       console.error(error);
     },
     onSettled: () => {
       setEditing(false);
-      queryClient.invalidateQueries(["post"]);
     },
   });
 
   const onPostSubmit = (postData: FieldValues) => {
-    postMutation.mutate(postData as PostForm);
+    mutation.mutate(postData as PostForm);
   };
 
   console.log("post", post);

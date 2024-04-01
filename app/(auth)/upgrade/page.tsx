@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import {
   validateCardName,
   validateCardNumber,

@@ -1,42 +1,22 @@
-"use client";
-import { useQuery } from "@tanstack/react-query";
-import { getPosts } from "./api/services/api";
-import PostCard from "@/components/PostCard";
-import { Post } from "@/types";
-import { useState } from "react";
-import SearchPost from "./SearchPost";
-import PostsSkeleton from "./PostsSkeleton";
+import { getPosts } from "@/services/services";
+import Posts from "./Posts";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-export default function Home() {
-  const [search, setSearch] = useState("");
-  const { data: posts, isLoading } = useQuery({
+export default async function Home() {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
     queryKey: ["posts"],
     queryFn: getPosts,
   });
-
-  console.log(search);
-  console.log(posts);
-
   return (
-    <section className="flex min-h-screen flex-col items-center">
-      <div className="lg:max-w-[62rem] w-full">
-        <SearchPost isLoading={isLoading} setSearch={setSearch} />
-      </div>
-
-      <div className="lg:max-w-[62rem] w-full">
-        {isLoading && <PostsSkeleton />}
-        {posts
-          ?.filter((post: Post) => {
-            return (
-              search.trim() === "" ||
-              post?.title.toLowerCase().includes(search.toLowerCase()) ||
-              post?.category.toLowerCase().includes(search.toLowerCase())
-            );
-          })
-          .map((post: Post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-      </div>
-    </section>
+    <>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Posts />
+      </HydrationBoundary>
+    </>
   );
 }

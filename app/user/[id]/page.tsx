@@ -1,12 +1,9 @@
 "use client";
-import { getUser } from "@/app/api/services/api";
-import PostCard from "@/components/PostCard";
-import UserCard from "@/components/UserCard";
+import { getUser } from "@/services/services";
 import { useAuth } from "@/hooks/useAuth";
-import { Comment, Post, UserData } from "@/types";
+import { UserData } from "@/types";
 import { FaInfo } from "react-icons/fa";
 import {
-  Avatar,
   Button,
   Card,
   Input,
@@ -14,15 +11,19 @@ import {
   PopoverContent,
   PopoverTrigger,
   Skeleton,
-  Textarea,
 } from "@nextui-org/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { ErrorMessage } from "@hookform/error-message";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import classnames from "classnames";
 import Guestbook from "./Guestbook";
 import DeleteModal from "@/components/DeleteModal";
@@ -57,17 +58,17 @@ export default function User({ params }: { params: { id: string } }) {
 
   console.log("user", user);
 
-  const mutation = useMutation(userMutation, {
+  const mutation = useMutation({
+    mutationFn: userMutation,
     onSuccess: () => {
       setEditing(false);
       toast.success("User updated");
+      queryClient.invalidateQueries(["user"] as InvalidateQueryFilters);
     },
     onError: (error) => {
       console.error(error);
     },
-    onSettled: () => {
-      queryClient.invalidateQueries(["user"]);
-    },
+    onSettled: () => {},
   });
 
   const onSubmit = (data: FieldValues) => {

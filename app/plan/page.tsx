@@ -2,7 +2,7 @@
 import { Membership } from "@/types";
 import { Button, Card, Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
-import { getOptions } from "../api/services/api";
+import { getOptions } from "../../services/services";
 import { FaCircle, FaPlus, FaCheck } from "react-icons/fa";
 import classnames from "classnames";
 import Link from "next/link";

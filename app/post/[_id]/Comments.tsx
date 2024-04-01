@@ -1,12 +1,16 @@
 import DeleteModal from "@/components/DeleteModal";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/hooks/useAuth";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import { formatDate } from "@/lib/utils/formatDate";
 import { Comment, ICommentForm, Post } from "@/types";
 import { ErrorMessage } from "@hookform/error-message";
 import { Button, Textarea } from "@nextui-org/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
@@ -44,21 +48,22 @@ const Comments = ({ post }: props) => {
     await axios.put(getBaseUrl() + `/api/comment/${commentId}`, commentData);
   };
 
-  const commentMutation = useMutation(editCommentMutation, {
+  const mutation = useMutation({
+    mutationFn: editCommentMutation,
     onSuccess: () => {
       toast.success("Comment updated");
+      queryClient.invalidateQueries(["post"] as InvalidateQueryFilters);
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error.message);
     },
     onSettled: () => {
       setEditingComment(false);
-      queryClient.invalidateQueries(["post"]);
     },
   });
 
   const onCommentSubmit = (data: FieldValues) => {
-    commentMutation.mutate(data as ICommentForm);
+    mutation.mutate(data as ICommentForm);
   };
   return (
     <>

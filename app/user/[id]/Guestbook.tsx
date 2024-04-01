@@ -1,18 +1,14 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 import { ProfileComment, User } from "@/types";
 import { ErrorMessage } from "@hookform/error-message";
+import { Button, Divider, Textarea } from "@nextui-org/react";
 import {
-  Avatar,
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Textarea,
-} from "@nextui-org/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -58,14 +54,15 @@ const Guestbook = ({ user, params }: props) => {
     return res.data;
   };
 
-  const mutation = useMutation(commentMutation, {
+  const mutation = useMutation({
+    mutationFn: commentMutation,
     onSuccess: () => {
       toast.success("Comment posted");
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries(["user"] as InvalidateQueryFilters);
       reset();
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error.message);
     },
     onSettled: () => {
       setIsLoading(false);

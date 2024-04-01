@@ -7,9 +7,9 @@ import axios from "axios";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
+import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 import { User } from "@/types";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 export default function Login() {
   const { handleLogin } = useAuth();
@@ -26,8 +26,9 @@ export default function Login() {
     return res.data;
   };
 
-  const { mutate, isLoading } = useMutation(loginMutation, {
-    onSuccess: (data) => {
+  const mutation = useMutation({
+    mutationFn: loginMutation,
+    onSuccess: (data: FieldValues) => {
       console.log("data", data);
       router.push("/");
       const email = data.userEmail;
@@ -38,12 +39,12 @@ export default function Login() {
       console.log("data", data);
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error.message);
     },
   });
 
   const onSubmit = (data: FieldValues) => {
-    mutate(data as User);
+    mutation.mutate(data as User);
   };
 
   return (
@@ -79,7 +80,7 @@ export default function Login() {
           )}
         ></ErrorMessage>
         <Button
-          isLoading={isLoading}
+          isLoading={mutation.isPending}
           type="submit"
           className="w-full"
           color="primary"

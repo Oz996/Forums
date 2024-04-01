@@ -2,13 +2,16 @@
 import { Button, Spinner, Textarea } from "@nextui-org/react";
 import { FieldValues, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Comment } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
-import { getBaseUrl } from "@/lib/utils/URL";
-import classNames from "classnames";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 interface props {
   params: {
@@ -41,19 +44,20 @@ const CommentForm = ({ params, isLoading }: props) => {
     return res.data;
   };
 
-  const { mutate, isLoading: formLoading } = useMutation(commentMutation, {
+  const mutation = useMutation({
+    mutationFn: commentMutation,
     onSuccess: () => {
       toast.success("Comment posted");
-      queryClient.invalidateQueries(["post"]);
+      queryClient.invalidateQueries(["post"] as InvalidateQueryFilters);
       reset();
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error.message);
     },
   });
 
   const onSubmit = (data: FieldValues) => {
-    mutate(data as Comment);
+    mutation.mutate(data as Comment);
   };
 
   const comment = watch("body");
@@ -61,7 +65,7 @@ const CommentForm = ({ params, isLoading }: props) => {
     comment?.trim() === "" || comment?.length === 0 || comment?.length == null;
   console.log(comment?.length);
 
-  const disabledButton = commentIsEmpty || isLoading || formLoading;
+  const disabledButton = commentIsEmpty || isLoading || mutation.isPending;
 
   return (
     <section className="p-10 md:rounded-xl border">
@@ -94,7 +98,7 @@ const CommentForm = ({ params, isLoading }: props) => {
             color={disabledButton ? "default" : "primary"}
             className="py-6"
           >
-            {formLoading && <Spinner size="sm" color="primary" />}
+            {mutation.isPending && <Spinner size="sm" color="primary" />}
             Post Comment
           </Button>
         </div>

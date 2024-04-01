@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { getBaseUrl } from "@/lib/utils/URL";
+import { getBaseUrl } from "@/lib/utils/getBaseUrl";
 
 const CreateForm = () => {
   const router = useRouter();
@@ -40,17 +40,18 @@ const CreateForm = () => {
     return res.data;
   };
 
-  const { mutate, isLoading } = useMutation(newPostMutation, {
-    onSuccess: (data) => {
+  const mutation = useMutation({
+    mutationFn: newPostMutation,
+    onSuccess: () => {
       router.push("/");
     },
     onError: (error) => {
-      console.error(error);
+      console.error(error.message);
     },
   });
 
   const onSubmit = async (data: FieldValues) => {
-    mutate(data as Post);
+    mutation.mutate(data as Post);
   };
 
   return (
@@ -111,7 +112,7 @@ const CreateForm = () => {
           )}
         ></ErrorMessage>
         <Button
-          isLoading={isLoading}
+          isLoading={mutation.isPending}
           type="submit"
           className="w-full"
           color="primary"
