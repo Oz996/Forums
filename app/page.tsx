@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <section className="flex min-h-screen flex-col items-center">
       <div className="lg:max-w-[62rem] w-full">
-        <SearchPost isLoading={isLoading} setSearch={setSearch} />
+        <SearchPost setSearch={setSearch} />
       </div>
 
       <div className="lg:max-w-[62rem] w-full">
