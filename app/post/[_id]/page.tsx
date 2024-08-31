@@ -26,7 +26,7 @@ export default function Page({ params }: { params: { _id: string } }) {
   const queryClient = useQueryClient();
   const { userId } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["post"],
+    queryKey: ["post", params._id],
     queryFn: () => getPost(params._id),
   });
 
