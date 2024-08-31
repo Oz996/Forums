@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-query";
 import UserCard from "@/components/UserCard";
 import CommentForm from "@/app/post/[_id]/CommentForm";
-import { Button, Input, Textarea, Skeleton } from "@nextui-org/react";
+import { Button, Input, Textarea } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
@@ -20,6 +20,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import Comments from "./Comments";
 import { formatDate } from "@/lib/utils/formatDate";
 import { getPost } from "@/services/services";
+import PostLoader from "./PostLoader";
 
 export default function Page({ params }: { params: { _id: string } }) {
   const [editing, setEditing] = useState(false);
@@ -71,35 +72,29 @@ export default function Page({ params }: { params: { _id: string } }) {
 
   console.log("post", post);
 
+  if (isLoading)
+    return (
+      <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
+        <PostLoader />
+      </section>
+    );
+
   return (
     <section className="md:max-w-[62rem] mx-auto container flex flex-col gap-10 md:gap-3">
       <div className="flex flex-col md:flex-row rounded-xl border">
         <div>
-          <UserCard user={data?.user} isLoading={isLoading} />
+          <UserCard user={data?.user} />
         </div>
         <div className="flex flex-col p-10 w-full">
           <div className="flex flex-col md:flex-row justify-between">
             {!editing ? (
               <div>
-                <Skeleton
-                  className={
-                    isLoading
-                      ? "rounded-lg w-full md:w-[30rem] lg:w-[40rem]"
-                      : ""
-                  }
-                  isLoaded={!isLoading}
-                >
-                  <h1 className="text-2xl font-semibold mb-10">
-                    {post?.title}
-                  </h1>
-                </Skeleton>
+                <h1 className="text-2xl font-semibold mb-10">{post?.title}</h1>
                 {!editing && (
                   <div className="flex my-6 items-center gap-3">
-                    {!isLoading && (
-                      <p className="text-gray-500 text-sm">
-                        Created at {formatDate(data?.createdAt)}
-                      </p>
-                    )}
+                    <p className="text-gray-500 text-sm">
+                      Created at {formatDate(data?.createdAt)}
+                    </p>
 
                     {editedPost && (
                       <p className="text-gray-500 text-sm italic pr-2">
@@ -108,16 +103,8 @@ export default function Page({ params }: { params: { _id: string } }) {
                     )}
                   </div>
                 )}
-                <Skeleton
-                  className={
-                    isLoading
-                      ? "rounded-lg h-[12rem] w-full md:w-[30rem] lg:w-[40rem]"
-                      : ""
-                  }
-                  isLoaded={!isLoading}
-                >
-                  <p>{post?.body}</p>
-                </Skeleton>
+
+                <p>{post?.body}</p>
               </div>
             ) : (
               <form className="w-full" onSubmit={handleSubmit(onPostSubmit)}>

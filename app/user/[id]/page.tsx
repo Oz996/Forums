@@ -10,7 +10,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Skeleton,
 } from "@nextui-org/react";
 import {
   InvalidateQueryFilters,
@@ -29,11 +28,12 @@ import Guestbook from "./Guestbook";
 import DeleteModal from "@/components/DeleteModal";
 import UserAvatar from "@/components/UserAvatar";
 import UserPosts from "./UserPosts";
+import UserLoader from "./UserLoader";
 
 export default function User({ params }: { params: { id: string } }) {
   const [editing, setEditing] = useState(false);
   const { data: user, isLoading } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["user", params.id],
     queryFn: () => getUser(params.id),
   });
   const { userEmail } = useAuth();
@@ -86,19 +86,21 @@ export default function User({ params }: { params: { id: string } }) {
       <div className="md:max-w-[62rem] mx-auto flex flex-col gap-5">
         <Card className="md:p-10 p-3 grid grid-cols-1 gap-10 lg:gap-0 lg:grid-cols-2 lg:h-[35rem]">
           <div className="flex flex-col gap-4 justify-center items-center">
-            <UserAvatar
-              isLoading={isLoading}
-              image={user?.image}
-              user={user}
-              className="mx-auto w-28 h-28"
-            />
-            {!editing ? (
+            {isLoading ? (
+              <UserLoader />
+            ) : (
+              <UserAvatar
+                image={user?.image}
+                user={user}
+                className="mx-auto w-28 h-28"
+              />
+            )}
+            {!editing && !isLoading ? (
               <div>
                 <div className="grid grid-cols-2 gap-2">
                   <div
                     className={classnames({
                       "flex gap-1 items-center": true,
-                      "w-[10rem]": isLoading,
                     })}
                   >
                     <p className="font-semibold">Rank</p>
@@ -124,49 +126,32 @@ export default function User({ params }: { params: { id: string } }) {
                       </PopoverContent>
                     </Popover>
                   </div>
-                  {!isLoading ? (
-                    <p
-                      className={classnames({
-                        "font-semibold self-center": true,
-                        "text-blue-600": member,
-                        "text-purple-600": regular,
-                      })}
-                    >
-                      {newbie
-                        ? "Newbie"
-                        : member
-                        ? "Member"
-                        : regular
-                        ? "Regular"
-                        : ""}
-                    </p>
-                  ) : (
-                    <Skeleton className="w-full h-6 rounded-full" />
-                  )}
-
+                  <p
+                    className={classnames({
+                      "font-semibold self-center": true,
+                      "text-blue-600": member,
+                      "text-purple-600": regular,
+                    })}
+                  >
+                    {newbie
+                      ? "Newbie"
+                      : member
+                      ? "Member"
+                      : regular
+                      ? "Regular"
+                      : ""}
+                  </p>
                   <p className="font-semibold">Posts</p>
-                  {!isLoading ? (
-                    <p>{user?.posts.length}</p>
-                  ) : (
-                    <Skeleton className="w-full h-6 rounded-full" />
-                  )}
+                  <p>{user?.posts.length}</p>
                   {isUser && (
                     <>
                       <p className="font-semibold">Email</p> <p>{email}</p>
                     </>
                   )}
                   <p className="font-semibold">Username</p>
-                  {!isLoading ? (
-                    <p>{user?.userName}</p>
-                  ) : (
-                    <Skeleton className="w-full h-6 rounded-full" />
-                  )}
+                  <p>{user?.userName}</p>
                   <p className="font-semibold">Joined</p>
-                  {!isLoading ? (
-                    <p>{user?.createdAt.slice(0, 10)}</p>
-                  ) : (
-                    <Skeleton className="w-full h-6 rounded-full" />
-                  )}
+                  <p>{user?.createdAt.slice(0, 10)}</p>
                   {isUser && (
                     <>
                       <Button
@@ -183,64 +168,66 @@ export default function User({ params }: { params: { id: string } }) {
                 </div>
               </div>
             ) : (
-              <div className="md:w-[17rem] w-full">
-                <form
-                  className="flex flex-col gap-3"
-                  onSubmit={handleSubmit(onSubmit)}
-                >
-                  <Input
-                    {...register("email", {
-                      required: "Email cannot be empty",
-                    })}
-                    type="email"
-                    label="Email"
-                    defaultValue=" "
-                  />
-                  <ErrorMessage
-                    errors={errors}
-                    name="email"
-                    render={({ message }) => (
-                      <p className="text-red-500 text-sm font-semibold">
-                        {message}
-                      </p>
-                    )}
-                  ></ErrorMessage>
-                  <Input
-                    {...register("userName", {
-                      required: "Username cannot be empty",
-                    })}
-                    type="text"
-                    defaultValue=" "
-                    label="Username"
-                  />
-                  <ErrorMessage
-                    errors={errors}
-                    name="userName"
-                    render={({ message }) => (
-                      <p className="text-red-500 text-sm font-semibold">
-                        {message}
-                      </p>
-                    )}
-                  ></ErrorMessage>
-                  <div className="flex">
-                    <Button
-                      className="w-[70%] rounded-full"
-                      type="submit"
-                      color="primary"
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      className="w-[30%] rounded-full"
-                      color="danger"
-                      variant="light"
-                      onClick={() => setEditing(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </form>
-              </div>
+              !isLoading && (
+                <div className="md:w-[17rem] w-full">
+                  <form
+                    className="flex flex-col gap-3"
+                    onSubmit={handleSubmit(onSubmit)}
+                  >
+                    <Input
+                      {...register("email", {
+                        required: "Email cannot be empty",
+                      })}
+                      type="email"
+                      label="Email"
+                      defaultValue=" "
+                    />
+                    <ErrorMessage
+                      errors={errors}
+                      name="email"
+                      render={({ message }) => (
+                        <p className="text-red-500 text-sm font-semibold">
+                          {message}
+                        </p>
+                      )}
+                    ></ErrorMessage>
+                    <Input
+                      {...register("userName", {
+                        required: "Username cannot be empty",
+                      })}
+                      type="text"
+                      defaultValue=" "
+                      label="Username"
+                    />
+                    <ErrorMessage
+                      errors={errors}
+                      name="userName"
+                      render={({ message }) => (
+                        <p className="text-red-500 text-sm font-semibold">
+                          {message}
+                        </p>
+                      )}
+                    ></ErrorMessage>
+                    <div className="flex">
+                      <Button
+                        className="w-[70%] rounded-full"
+                        type="submit"
+                        color="primary"
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        className="w-[30%] rounded-full"
+                        color="danger"
+                        variant="light"
+                        onClick={() => setEditing(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              )
             )}
           </div>
           <Guestbook user={user} params={params} />
