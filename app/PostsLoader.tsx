@@ -4,7 +4,10 @@ export default function PostsLoader() {
   return (
     <>
       {new Array(4).fill(0).map((_, index) => (
-        <Card className="p-10 m-3 mx-auto flex flex-col gap-10 border-b-8 max-md:rounded">
+        <Card
+          key={index}
+          className="p-10 m-3 mx-auto flex flex-col gap-10 border-b-8 max-md:rounded"
+        >
           <div className="flex gap-5">
             <Skeleton className="size-14 rounded-full" />
             <div className="space-y-3">
