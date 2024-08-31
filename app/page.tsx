@@ -5,7 +5,7 @@ import PostCard from "@/components/PostCard";
 import { Post } from "@/types";
 import { useState } from "react";
 import SearchPost from "./SearchPost";
-import PostsSkeleton from "./PostsSkeleton";
+import PostsLoader from "./PostsLoader";
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -24,7 +24,7 @@ export default function Home() {
       </div>
 
       <div className="lg:max-w-[62rem] w-full">
-        {isLoading && <PostsSkeleton />}
+        {isLoading && <PostsLoader />}
         {posts
           ?.filter((post: Post) => {
             return (

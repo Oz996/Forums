@@ -46,7 +46,7 @@ const PostCard = ({ post }: { post: Post }) => {
           </div>
         </CardHeader>
         <Divider />
-        <div className="lg:px-20 mt-10 line-clamp-3">
+        <div className="lg:px-10 mt-10 line-clamp-3">
           <p className="mb-3">{post?.body}</p>
           {newPost && (
             <Chip
